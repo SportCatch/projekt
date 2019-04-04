@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Moje Wydarzenia</h2>
+<div class="wydarzenia">
+		<div class="Elementy_wydarzen">
+			
+		{% for event in Wlasne %}
+		<div class="Obramowanie">
+		<div class="Text">
+
+			
+			<h2><a href="{%url 'event_detail' pk=event.pk%}">{{event.nazwa}}</a></h2>
+			<p>Data: {{event.data_rozpoczecia}}</p>
+			<p>Lokalizacja: {{event.miejsce}}</p>
+			</div>
+			{% if request.user.is_authenticated%}
+			<div class="options">
+			<a class="btn btn-default" href="{%url 'new_event'%}"><span class="glyphicon glyphicon-plus"></span></a>
+			<a class="btn btn-default" href="{%url 'event_delete' pk=event.pk%}"><span class="glyphicon glyphicon-trash"></span></a>
+			<a class="btn btn-default" href="{%url 'edit_event' pk=event.pk%}"><span class="glyphicon glyphicon-pencil"></span></a>
+			</div>
+			{%endif%}
+			</div>
+			
+		{%endfor%}
+	</div>
+	</div>
+		
+<!--################################-->
+
+
+<h2>Wydarzenia w których bierzesz udział</h2>
+<div class="wydarzenia">
+		<div class="Elementy_wydarzen">
+			<!--{% if request.user.is_authenticated%}-->
+			<!--<a class="btn btn-default" href="{%url 'new_event'%}"><span class="glyphicon glyphicon-plus"></span></a>-->
+			<!--{%endif%}-->
+		{% for event in Udzial %}
+		<div class="Obramowanie">
+				<div class="Text">
+			<h2><a href="{%url 'event_detail' pk=event.pk%}">{{event.nazwa}}</a></h2>
+			<p>Data: {{event.data_rozpoczecia}}</p>
+			<p>Lokalizacja: {{event.miejsce}}</p>
+			<!--{% if request.user.is_authenticated %}-->
+			<!--<a class="btn btn-default" href=""><i class="glyphicon glyphicon-trash"></i></a>-->
+			<!--<a class="btn btn-default" href="{%url 'edit_event' pk=event.pk%}"><i class="glyphicon glyphicon-pencil"></i></a>-->
+			<!--{%endif%}-->
+				</div>
+				</div>
+		{%endfor%}
+		   </div>
+		</div>
+
+
+
+
+
+
+
+
+{% endblock %}
+</html>

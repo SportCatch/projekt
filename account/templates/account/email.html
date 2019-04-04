@@ -1,0 +1,31 @@
+{% extends "Base.html" %}
+
+{% block content %}
+<form method="post">
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+    {% csrf_token %}
+    <!--{{ form }}-->
+    <!--<div class="form-actions">-->
+        <!--<button type="submit">Wyślij</button>-->
+    <!--</div>-->
+    		<div class = "formularzRejestracji">
+        <table >
+    <tr>
+    <td style="padding:0 5px 10px 0;"><label for="{{form.subject.id_for_label}}">Temat </label></td>
+    <td style="padding:0 5px 10px 0;">{{form.subject}}</td></tr>
+	<tr>
+    <td style="padding:0 5px 10px 0;"><label for="{{form.message.id_for_label}}">Treść </label></td>
+    <td style="padding:0 5px 10px 0;">{{form.message}}</td></tr>
+        </table>
+         <input type="submit" value="Wyślij" style="position:relative;left:25%;">
+
+     </div>
+</form>
+
+{% endblock content %}

@@ -1,0 +1,63 @@
+{%extends 'Base.html'%}
+{%block content%}
+
+<div class="wydarzenia">
+    <div class="Elementy_wydarzen">
+        <h2>{{adv.tytul}}</h2>
+        <span>
+            {%if adv.zdjecie.url.value != ""%}
+            <img height = "150" src="{{adv.zdjecie.url}}" />
+            {%endif%}
+        </span>
+        <div class="Text2">
+            <p>Data utworzenia: {{adv.data}}</p>
+            <p>Autor: {{adv.autor}}</p>
+            <p>Opis: <br>{{adv.opis}}</p>
+        </div>
+    </div>
+</div>
+
+<b>Sekcja komentarzy</b>
+
+
+
+<div class="mar">
+
+
+
+
+    {%for kom in komentarze%}
+    <div class="komentarze">
+        {% if kom.autor.username == request.user.username %}
+        <div class="options">
+            <a href="{% url 'delete_com3' pk=adv.pk comPK=kom.pk %}" class="glyphicon glyphicon-remove">&#160;</a>
+            <a href="{% url 'EditCommentAdv'  pk=kom.pk pkadv=adv.pk %}" class="glyphicon glyphicon-pencil"> </a>
+        </div>
+        {%endif%}
+
+        <div class="Text3">
+            <p>{{kom.autor}}</p>
+            <p>{{kom.data}}</p>
+        </div>
+        <div class="tresc">
+            <p>{{kom.tresc}}</p>
+        </div>
+
+    </div>
+    {%endfor%}
+</div>
+
+
+{%if flag%}
+<h3>Twój komenatrz został dodany</h3>
+{%else%}
+<h3>Dodaj komentarz</h3>
+<form action="{{adv.get_absolute_url}}" method="post">
+    {{komentarz_form.as_p}}
+    {%csrf_token%}
+    <p><input type="submit" value="Dodaj komentarz"></p>
+    {%endif%}
+</form>
+
+
+{%endblock%}

@@ -1,0 +1,17 @@
+﻿{% extends 'Base.html' %}
+
+{% block content %}
+		{% for message in messages %}
+		
+		<div class="message">
+			{{ message.autor.user.username}}: {{message.tresc}}
+				<div class="date-message">{{ message.data_utworzenia }}</div>
+		</div>
+		{% endfor %}
+	
+	 <form method="post">
+		{% csrf_token %}
+		{{ form }}
+		<br/>
+    <input type="submit" value="Wyślij">
+{% endblock %}

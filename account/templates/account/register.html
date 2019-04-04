@@ -1,0 +1,32 @@
+{% extends 'Base.html' %}
+
+{% block title %}Utwórz konto{% endblock %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+
+
+<div class="registerForm">
+
+    <form  method = "POST" action="." enctype="multipart/form-data">
+    {% csrf_token %}
+    <h1>Utwórz konto</h1>
+        {% render_field user_form.username class="txt" placeholder="Login" %}
+
+        {% render_field user_form.password class="txt" placeholder=user_form.password.name %}
+
+        {% render_field user_form.password2 class="txt" placeholder=user_form.password2.name %}
+
+        {% render_field user_form.email class="txt" placeholder=user_form.email.name %}
+
+        {% render_field user_form.first_name class="txt" placeholder=user_form.first_name.name %}
+
+        {% render_field user_form.last_name class="txt" placeholder=user_form.last_name.name %}
+
+        <button type="submit"  class="btnForm">Zarejestruj</button>
+    </form>
+
+</div>
+
+{% endblock %}

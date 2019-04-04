@@ -1,0 +1,24 @@
+
+{% extends 'base.html' %}
+{% block content %}
+    {% load widget_tweaks %}
+
+	<div class="wydarzeniaForm" style="width:500px;">
+        <form method="post" enctype="multipart/form-data">
+            {%csrf_token%}
+
+            <h1>Dodaj wydarzenie</h1>
+
+            {% render_field form.nazwa class="txt" placeholder=form.nazwa.name %}
+            {% render_field form.opis class="txt" placeholder=form.opis.name %}
+            {% render_field form.miejsce class="txt" %}
+            {% render_field form.data_rozpoczecia class="txt" placeholder="YYYY-MM-DD" %}
+            {% render_field form.photo style="color:white;" placeholder=form.nazwa.name %}
+            <button type="submit" class="btnForm">Dodaj wydarzenie</button>
+        </form>
+
+
+    </div>
+
+{% endblock %}
+

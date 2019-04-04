@@ -1,0 +1,49 @@
+{% extends 'Base.html' %}
+{%block content%}
+
+<form method="post" enctype="multipart/form-data">
+
+    <div class = "formularzRejestracji">
+          
+
+            <table >
+                
+            <tr>
+                    <td style="padding:0 5px 10px 0;"><label for="{{uform.nazwa.id.id_for_label}}">Nazwa: </label></td>
+                    <td style="padding:0 5px 10px 0;">{{uform.nazwa}}</td></tr>
+                    <tr>
+                    <td style="padding:0 5px 10px 0;"><label for="{{uform.opis.id_for_label}}">Opis: </label></td>
+                    <td style="padding:0 5px 10px 0;">{{uform.opis}}</td></tr>
+                            <tr>
+                   <td style="padding:0 5px 10px 0;"> <label for="{{uform.miejsce.id_for_label}}">Miejsce: </label></td>
+                    <td style="padding:0 5px 10px 0;">{{uform.miejsce}}</td></tr>
+                            <tr>
+                    <td style="padding:0 5px 10px 0;"><label for="{{uform.data_rozpoczecia.id_for_label}}">Data rozpoczęcia: </label></td>
+                   <td style="padding:0 5px 10px 0;">{{uform.data_rozpoczecia}}</td></tr>
+                   
+                   
+                                
+
+                   {% if ilosc != 0 %}
+                   <tr><td style="padding:0 5px 10px 0;"><label>Uczestnicy</label></td></tr>
+                                   {% for u in Wydarzenie.uczestnicy.all  %}
+                                   <tr>
+                                           <td style="padding:0 5px 10px 0;">{{u}} <a href="{% url 'usun_uczestnika' pk=Wydarzenie.pk ucz=u.id %}"><button>Usun</button></a></h2> </td>
+                                   </tr>
+                                   {% endfor %}    
+                       
+                           {% endif %}
+            </table >
+
+
+
+
+            {% csrf_token %}
+    <input type="submit" value="Zapisz zmiany" style="position:relative;left:25%;">
+
+    </form>
+
+
+
+
+{% endblock %}

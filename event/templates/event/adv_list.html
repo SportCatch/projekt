@@ -1,0 +1,31 @@
+{% extends 'Base.html' %}
+{% block title %}Nasza zespołowa aplikacja- SportCatch{% endblock %}
+{% block content %}
+<div class="wydarzenia">
+<h2>Ogłoszenia</h2>
+<div class="Elementy_wydarzen">
+
+
+{% for adv in lista %}
+<div class="Obramowanie">
+    <div class="Text">
+    <h2><a href="{%url 'adv_detail' pk=adv.pk%}">{{adv.tytul}}</a></h2>
+    <p>Autor: {{adv.autor}}</p>
+    <p>Data: {{adv.data}}</p>
+
+    </div>
+  
+        {% if request.user.is_authenticated and request.user.username == adv.autor.username%}
+        <div class="options" >
+    <a class="btn btn-default" href="{% url 'adv_delete' pk=adv.pk %}"><i class="glyphicon glyphicon-trash"></i></a>
+    <a class="btn btn-default" href="{%url 'adv_edit' pk=adv.pk%}"><i class="glyphicon glyphicon-pencil"></i></a>
+        </div>
+    {%endif%}
+   
+   
+</div> 
+{%endfor%}
+
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "Base.html" %}
+
+{% block content %}
+<div class="Logowanie">
+	<h1 style = "color:	#61892F; font-weight: bold;">Edycja {{miejsce}}</h1>
+
+	<form method="post" enctype="multipart/form-data">
+
+		<div class = "formularzRejestracji">
+        <table >
+    <tr>
+    <td style="padding:0 5px 10px 0;"><label for="{{form.tresc.id_for_label}}">Treść: </label></td>
+    <td style="padding:0 5px 10px 0;">{{form.tresc}}</td></tr>
+
+        </table>
+
+        {% csrf_token %}
+
+		<input class="btn btn-default" type="submit" value="Zapisz zmiany">
+        </div>
+		</form>
+</div>
+{% endblock content %}

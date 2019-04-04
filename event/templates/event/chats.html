@@ -1,0 +1,15 @@
+{% extends 'Base.html' %}
+
+{% block content %}
+		<mm>Twoje czaty</mm>
+		{% for chat in chats %}
+		<div class="chat">
+			<a href="{% url 'concrete_chat' pk_chat=chat.id %}">{{ chat.name }}</a>
+		</div>
+		{% endfor %}
+		{% for chat in other_chats %}
+		<div class="chat">
+		<a href="{% url 'concrete_chat' pk_chat=chat.id %}">{{ chat.name }}</a>
+		</div>
+		{% endfor %}
+{% endblock %}

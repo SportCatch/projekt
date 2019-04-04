@@ -1,0 +1,31 @@
+﻿{% extends 'Base.html' %}
+
+{% block content %}
+
+	<div class="wydarzenia">
+			<div class="Elementy_wydarzen">
+	Powiadomienia
+		{% for notification in notifications %}
+		<div class="Obramowanie">
+			
+			{% if notification.event != null %}
+				<h3><a href="{%url 'event_detail' pk=notification.event.pk%}">{{ notification.text }} </a></h3>
+			{% else %}
+				<h3><a href="{%url 'concrete_chat' pk_chat=notification.chat.id%}">{{ notification.text }} </a></h3>
+		{% endif %}
+	</div>
+		{% endfor %}
+
+
+		{% for zapr in zaproszenia %}
+	 <div class="Obramowanie">
+	 <h3>Zostales Zaproszony przez {{zapr.autorr}} do znajomych</h3>
+	<h3><a href="{%url 'przyjmij_zaproszenie' pika=1 czu=zapr.pk %} ">Przyjmij </a></h3>
+	<h3><a href="{%url 'przyjmij_zaproszenie' pika=0 czu=zapr.pk %}"> Odrzuc</a></h3>
+	</div>
+	{% endfor %}
+
+
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+{% load widget_tweaks %}
+
+	<div class="signup-form" >
+		<form  method = "post" enctype="multipart/form-data">
+			{%csrf_token %}
+			<h1>Dodaj miejsce</h1>
+
+					{% render_field form.adres class="txt" placeholder=form.adres.name %}
+
+					{% render_field form.miasto class="txt" placeholder=form.miasto.name %}
+
+					{% render_field form.nazwa class="txt" placeholder=form.nazwa.name %}
+
+					{{form.photo}}
+
+			{%  for field in form.visible_fields %}
+				{% for error in field.errors %}
+					<div style="font-size: 10px;">
+						{{error}}
+					</div>
+				{%endfor%}
+
+			{%endfor%}
+
+				<button type="submit"  class="btnForm">Dodaj miejsce</button>
+		</form>
+
+
+	</div>
+
+	
+{% endblock %}

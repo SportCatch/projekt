@@ -1,0 +1,95 @@
+{%extends 'Base.html'%}
+{%block content%}
+
+        <div class="wydarzenia">
+        <div class="Elementy_wydarzen">
+    <h2>{{event.nazwa}}</h2>
+
+    <span>
+    {%if event.photo.url.value != ""%}
+    <image heigh="150" width="300" src="{{event.photo.url}}"></image></span>
+    {%endif%}
+    <div class="Obramowanie3">
+    <div style="float: right;">
+    <p>Początek o: {{event.data_rozpoczecia}}</p>
+    </div>
+    <div class="Opiss">
+    <p>Opis:</p>
+    </div>
+        <div class="ramka">
+        
+        {{event.opis}}
+        </div>
+   
+    <div class="stopka"> 
+    <p>Organizator wydarzenia: {{event.organizator}}</p>
+    <p>Lokalizacja: {{event.miejsce}}</p>
+    </div>  
+    </div>
+    {% if request.user.is_authenticated %}
+    
+    
+	<p>
+	<a href="{% url 'take_part' event.id %}">{{takePartButtonText}}</a>
+	</p>
+    {%endif%}
+        {% if uczestnicy|length > 0 %}
+        Uczestnicy:
+        <div class="mar1">
+    
+    {%for ucz in uczestnicy%}
+    <div>
+	{% if ucz.pk != request.user.pk %}
+      <a href="{% url 'list_of_common_events' pk=ucz.pk %}" >{{ucz}}</a>
+	  {% else %}
+	  {{ ucz }}
+	 {% endif %}
+    </div>
+    {%endfor%}
+</div>
+    {% endif %}
+
+
+</div>
+</div>
+
+    <b>Sekcja komentarzy</b>
+    <div class="mar">
+    {%for kom in komentarze%}
+    <div class="komentarze">
+    
+    {% if kom.autor.username == request.user.username %}
+    <div class="options">
+    <a href="{% url 'delete_com2' pk=event.pk comPK=kom.pk %}" class="glyphicon glyphicon-remove">&#160;</a>
+    <a href="#" class="glyphicon glyphicon-pencil"> </a>
+    </div>
+    {%endif%}
+    <div class="Text3">
+    <p>{{kom.autor}}</p>
+    <p>{{kom.data}}</p>
+</div>
+<div class="tresc">
+    <p>{{kom.tresc}}</p>
+</div>
+   
+</div>
+    {%endfor%}
+</div>
+
+    {%if flag%}
+    <h3>Twój komenatrz został dodany</h3>
+    {%else%}
+
+        {% if request.user.is_authenticated %}
+ 
+    <form action="{{event.get_absolute_url}}" method="post">
+        {{komentarz_form.as_p}}
+        {%csrf_token%}
+        <p><input type="submit" value="Dodaj komentarz" ></p>
+    {%endif%}
+    </form>
+    {% endif%}
+
+
+
+{%endblock%}

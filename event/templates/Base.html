@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html lang="pl">
+
+<head>
+
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+	<title>SportCatch</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href="/static/style.css" rel="stylesheet" type="text/css" />
+
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,700&subset=latin,latin-ext' rel='stylesheet'
+		type='text/css'>
+
+	<link href="css/fontello.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+
+<body>
+
+	<div class="wrapper">
+		<div class="header">
+			<div class="logo">
+				<a  href="{% url 'index' %}"><img src="/static/images/sportcatch.svg"/></a>
+
+
+			</div>
+		</div>
+		<div class="login" >
+		{% if request.user.is_authenticated%}
+			<p>
+			Hej, {{ request.user.username }}!
+			<span><img height="100" src="{{profiles.photo.url}}" /></span>
+			<a href="{% url 'logout' %}" class="btn btn-success">
+
+                Wyloguj!
+                 </a>
+			</p>
+		<img   height="100" src="{{user.photo.url}}"/>
+
+		{% else %}
+			<div style="margin-top:60px;">
+			<a  href="{% url 'login'%}?next={{ request.path|urlencode }}" class="btn btn-success">Zaloguj się</a>
+			<span >lub</span>
+			<a href="{% url 'register' %}"  class="btn btn-danger">Zarejestruj się</a>
+				</div>
+			{% endif %}
+		</div>
+
+		<div class="nav">
+			<ol>
+
+				<li><span>Ogłoszenie</span>
+					<ul>
+						<li><a href="{% url 'advlist' %}">Pokaż ogłoszenia</a></li>
+						{% if request.user.is_authenticated %}
+						<li><a href="{% url 'new_adv' %}">Dodaj ogłoszenie</a></li>
+						{%endif%}
+					</ul>
+				</li>
+				<li><span>Wydarzenia</span>
+					<ul>
+						{% if request.user.is_authenticated %}
+						<li><a href="{% url 'moje_wydzarzenia' %}">Moje wydarzenia</a></li>
+						<li><a href="{% url 'new_event' %}">Dodaj nowe</a></li>
+						{%endif%}
+						<li><a href="{% url 'events_list' %}">Wszystkie</a></li>
+					</ul>
+				</li>
+				<li><span>Miejsca</span>
+					<ul>
+						<li><a href="{% url 'place_list'  %}">Wszystkie miejsca</a></li>
+
+						{% if request.user.is_authenticated %}
+						<li><a href="{% url 'new_place'  %}">Dodaj nowe!</a></li>
+						{%endif%}
+
+					</ul>
+				</li>
+				{% if request.user.is_authenticated%}
+				<li><a href="#">Znajomi</a>
+					<ul>
+						<li><a href="{% url 'searching' %}">Szukaj</a></li>
+						<li><a href="{% url 'my_friends' %}">Moi znajomi</a></li>
+						<li><a href="{% url 'chats' %}">Moje czaty</a></li>
+						<li><a href="{% url 'new_chat'  %}">Utwórz czat</a></li>
+					</ul>
+				</li>
+				{%endif%}
+				{% if request.user.is_authenticated%}
+				<li><a href="{% url 'my_account' %}">Moje konto</a></li>
+				<li>{% if request.session.new_notifications != null %}
+					<a href="{% url 'get_notifications'%}">{{request.session.new_notifications}}</a>
+					{% else %}
+					<a href="{% url 'get_notifications'%}">Powiadomienia</a>
+					{% endif %}
+				</li>
+				{%endif%}
+				<li><a href="#">Autorzy</a></li>
+				<li><a href="{%url 'searching' %}">Wyszukaj</a></li>
+			</ol>
+
+		</div>
+
+		<div class="content">
+			{% block content %}
+			<div class="slider1" onload=zmienslajd()>
+			</div>
+			{% endblock content %}
+		</div>
+
+
+		<div class="footer">Projekt SportCatch &copy; 2018/19 Politechnika Białostocka</div>
+	</div>
+
+	<script src="jquery-1.11.3.min.js"></script> <!-- sticky menu bar -->
+
+	<script>
+
+		$(document).ready(function () {
+			var NavY = $('.nav').offset().top;
+
+			var stickyNav = function () {
+				var ScrollY = $(window).scrollTop();
+
+				if (ScrollY > NavY) {
+					$('.nav').addClass('sticky');
+				} else {
+					$('.nav').removeClass('sticky');
+				}
+			};
+
+			stickyNav();
+
+			$(window).scroll(function () {
+				stickyNav();
+			});
+		});
+
+
+
+	</script>
+
+</body>
+
+</html>

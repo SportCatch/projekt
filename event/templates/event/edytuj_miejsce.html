@@ -1,0 +1,31 @@
+{% extends "Base.html" %}
+
+{% block content %}
+<div class="Logowanie">
+	<h1 style = "color:	#61892F; font-weight: bold;">Edycja {{miejsce}}</h1>
+
+	<form method="post" enctype="multipart/form-data">
+
+		<div class = "formularzRejestracji">
+        <table >
+    <tr>
+    <td style="padding:0 5px 10px 0;"><label for="{{miejsce_form.adres.id_for_label}}">Adres: </label></td>
+    <td style="padding:0 5px 10px 0;">{{miejsce_form.adres}}</td></tr>
+	<tr>
+    <td style="padding:0 5px 10px 0;"><label for="{{miejsce_form.miasto.id_for_label}}">Miasto: </label></td>
+    <td style="padding:0 5px 10px 0;">{{miejsce_form.miasto}}</td></tr>
+            <tr>
+   <td style="padding:0 5px 10px 0;"> <label for="{{miejsce_form.nazwa.id_for_label}}">Nazwa: </label></td>
+    <td style="padding:0 5px 10px 0;">{{miejsce_form.nazwa}}</td></tr>
+    <td style="padding:0 5px 10px 0;"> <label for="{{miejsce_form.zaakceptowane.id_for_label}}">Akceptacja: </label></td>
+    <td style="padding:0 5px 10px 0;">{{miejsce_form.zaakceptowane}}</td></tr>
+
+        </table>
+
+        {% csrf_token %}
+
+		<input class="btn btn-default" type="submit" value="Zapisz zmiany">
+        </div>
+		</form>
+</div>
+{% endblock content %}

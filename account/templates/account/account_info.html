@@ -1,0 +1,28 @@
+{% extends "Base.html" %}
+
+{% block content %}
+<div class="infoView">
+   <h1>Moje Konto</h1>
+    <span><img  height="150" src="{{user.photo.url}}"/></span>
+    <div class="informacja"></div>
+    <div class="informacja"> Imie: {{user.user.first_name}} </div>
+    <div class="informacja"> Nazwisko: {{user.user.last_name}} </div>
+    <div class="informacja"> Nick: {{user.user.username}} </div>
+    <div class="informacja"> Email: {{user.user.email}} </div>
+    <div class="informacja">Data urodzenia:
+        {% if user.date_of_birth %}
+         {{user.date_of_birth}} </div>
+        {% else %}
+        brak danych
+        {% endif %}
+    <div class="informacja">Liczba przyjaciół:
+        {% if user.friends.all %}
+        {{user.friends.all|length}}
+        {% else %}
+        0
+        {% endif %}
+    </div>
+    <a href = "edit"><button class="infoBtn">Edytuj konto</button></a>
+</div>
+</div>
+{% endblock content %}

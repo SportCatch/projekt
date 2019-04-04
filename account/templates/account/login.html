@@ -1,0 +1,27 @@
+{% extends 'Base.html' %}
+{% block content %}
+
+
+
+<form class="form" action="." method = "post" style="position: relative; left:32%;">
+	<h2 style = "color:	#459b45; font-weight: bold;"> Logowanie </h2><br>
+	{% csrf_token %}
+
+	<table>
+
+	<tr>
+    <td style="padding:0 5px 10px 0;"><label for="{{form.username.id_for_label}}">Nazwa użytkownika: </label></td>
+    <td style="padding:0 5px 10px 0;">{{form.username}}</td></tr>
+		<td style="padding:0 5px 10px 0;"><label for="{{form.password.id_for_label}}">Hasło: </label></td>
+    <td style="padding:0 5px 10px 0;">{{form.password}}</td></tr>
+
+	</table>
+
+	<div class = "text">Nie posiadasz konta?<a href="/account/register" class="link"> Załóż je teraz!</a></div>
+	<div class ="text"><a href="{% url 'password_reset_form' %}" class="link">Zapomniałem hasła</a></div><br>
+	<input  type = "submit" value = "Zaloguj" class="btn btn-success" style="margin-left: 15%;"><a href="{% url 'social:begin' 'facebook' %}" />  	<img src="/static/images/facebookZmiana.png"  class="facebook" no-repeat="none"></a>
+	<input type="hidden" name="next" value="{{ request.GET.next }}">
+
+</form>
+</div>
+{% endblock %}

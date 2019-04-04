@@ -1,0 +1,15 @@
+﻿{% extends 'Base.html' %}
+
+{% block content %}
+<div class="friends">
+    <b>Zaproś znajomych do rozmowy</b>
+  <form method="post">
+    {% csrf_token %}
+      {% for item in form.choices %}
+      <div class="switch">
+            {{item}}
+      </div>
+    {% endfor %}
+    <input type="submit" value="Utwórz" class="btn btn-success">
+	</div>
+{% endblock %}

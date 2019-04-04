@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body class="body" onload = "zmienslajd()">
+    <style>
+
+ .navbar {
+  overflow: hidden;
+  background: -webkit-linear-gradient(-45deg, #131313 0%,#111111 18%,#1c1c1c 25%,#1c1c1c 40%,#4c4c4c 64%,#4c4c4c 64%,#474747 77%,#474747 89%,#2b2b2b 100%);
+  position: fixed;
+  top: 3%;
+  left:5%;
+  right:5%;
+  z-index:5;
+  border-radius: 25px
+ 
+}
+
+.navbar a {
+  float: left;
+  display: block;
+  color: #61892F;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.navbar a:hover {
+  font-size: 35px;
+  text-decoration: underline;
+
+}
+
+.main {
+  padding: 16px;
+  margin-top: 30px;
+  background: white;
+  height: 1500px; /* Used in this example to enable scrolling */
+}
+
+.napis{
+	font-size: 18px;
+}
+
+
+
+.slider1{
+	postition:absolute;
+	top:10%;
+	width:100%;
+	z-index:99;
+
+}
+.br{
+background: linear-gradient(to bottom, #222629 7%,#616466 47%,#8e8e8e 71%,#f6f6f6 95%,#ffffff 100%); 
+position: absolute; 
+ top: 0%;
+ right: 0%;
+ left:0%;
+ bottom: 0%;
+ z-index:-1;
+}
+.guzik_prawo{
+	position:absolute;
+	top:44%;
+	right:5%;
+	bottom:51%;
+	left:91%;
+	background-repeat:none;
+	background-image:url("/static/images/strzalka_prawo.svg");
+	z-index:99;
+}
+.guzik_prawo:hover{
+	cursor:pointer;
+}
+.guzik_lewo{
+	position:absolute;
+	top:44%;
+	left:5%;
+	bottom:51%;
+	right:91%;
+	background-repeat:none;
+	background-image:url("/static/images/strzalka_lewo.png");
+	z-index:99;
+}
+.guzik_lewo:hover{
+	cursor:pointer;
+}
+
+.Logowanie{
+	position: absolute;
+	top: 25%;
+	left: 40%;
+	color: #222629;
+	font-size: 20px;
+}
+
+
+
+input[type=submit]{
+	border: 1px solid black;;
+	background: black;
+	color: #61892F;
+	font-size: 15px;
+	border-radius: 25px;
+	font-size: 20px;
+   
+}
+
+input[type=submit]:hover{
+	background:white;
+	color: black;
+	border-radius: 25px;
+
+}
+input[type=button]{
+	border: 1px solid black;;
+	background: black;
+	color: #61892F;
+	font-size: 15px;
+	border-radius: 25px;
+	font-size: 20px;
+
+}
+
+input[type=button]:hover{
+	background:white;
+	color: black;
+	border-radius: 25px;
+
+}
+.facebook{
+	margin: 10px;
+	background-image:url("/static/images/facebook.png")
+	
+}
+
+.utworz{
+	text-align: center;
+}
+
+.text{
+	font-size: 20px;
+}
+
+.link{
+	color: #222629;
+	font-weight: bold;
+
+}
+
+.link:hover{
+	color: white;
+	text-decoration:none; 
+
+}
+
+
+.Zaloguj {
+	position:absolute;
+	left:80%;
+	top:20%;
+	}
+
+.Wyloguj{
+	position:absolute;
+	left:80%;
+	top:40%;
+	}
+
+	.Zalogowano{
+	    position: absolute;
+        left:77%;
+        right: 0%;
+	    bottom: 67%;
+	    color: #61892F;
+	    margin: 5px;
+	    font-size: 20px;
+	    overflow: hidden;
+
+	}
+.Rejestracja {
+	position:absolute;
+	
+	top:20%;
+	display:flex;
+	justify-content: flex-end;
+	left:22%;
+	}
+.Edytuj{
+	position:absolute;
+	
+	top:20%;
+	display:flex;
+	justify-content: flex-end;
+	left:12%;
+	}
+.Powiadomienie{
+	position:absolute;
+	
+	top:20%;
+	display:flex;
+	justify-content: flex-end;
+	left:40%;
+	}
+.image{
+position:absolute;
+left:92%;
+top:15%;
+}
+.wydarzenia{
+position:absolute;
+top:22%;
+margin-left:5%;
+margin-bottom:10px;
+padding-left:100px;
+background:#ffffff;
+width:600px;
+border-radius:25px;
+
+}
+
+.wydarzenia a{
+ color: black;
+}
+.wydarzenia a:hover{
+text-decoration: none;
+}
+    </style>
+	<div class="navbar">
+  <a href='/'><img src = "/static/images/sportcatch.svg"></a>
+  <div class="Edytuj">
+  <a href="{% url 'events_list'%}">Eventy</a>
+  </div>
+  
+  
+  <div class="Powiadomienie">
+  {% if request.session.new_notifications != null %}
+  <a href="{% url 'get_notifications'%}">{{request.session.new_notifications}}</a>
+  {% else %}
+  <a href="{% url 'get_notifications'%}">Powiadomienia</a>
+  {% endif %}
+  </div>
+  
+  
+  {% if request.user.is_authenticated%}
+        {%if request.user.username == "admin"%}
+            <div class='Rejestracja'>
+                <a href="{% url 'admin:index'%}"> Panel admina </a>
+            </div>
+        {%else%}
+            <div class='Rejestracja'>
+                <a href="{% url 'edit'%}"> Edytuj Konto </a>
+            </div>
+        {%endif%}
+    
+            <div class="Wyloguj" >
+				<a href="{% url 'logout' %}">
+                 Wyloguj
+                 </a>
+            </div>
+        <div class="image">
+            {% for prof in profiles %}
+            {% if prof.user == request.user %}
+            {% if prof.photo %}
+            <img height="80" src="{{prof.photo.url}}"/>
+
+
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+
+        </div>
+            <span class="Zalogowano">Zalogowano jako: {{request.user.username}}</span>
+    
+    {% else %}
+    
+    <div class="Rejestracja" >
+      <a href="{% url 'register' %}">  Rejestracja</a>
+        </div>
+    
+    {% ifnotequal request.path "/account/login/" %}
+    
+    <div class="Zaloguj">
+     <a href="{% url 'login'%}?next={{ request.path|urlencode }}">   Zaloguj </a>
+        </div>
+       
+    {% endifnotequal %}
+    {% endif %}
+</div>
+
+<div class="br">
+
+</div>
+
+    <div class ="glowna">
+
+        {% block content %}
+            {% endblock %}
+    </div>
+
+</body>
+</html>

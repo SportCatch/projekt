@@ -1,0 +1,55 @@
+{% extends "Base.html" %}
+{% block content %}
+<div>
+    <form>
+    <select id="choice_select" name="wybor" class="SelectSearch">
+        <option value="event">Wydarzenia</option>
+        <option value="place">Miejsca</option>
+        <option value="person">Użytkownicy</option>
+    </select>
+        <input class="wyszukiwanie" name="search_phrase" type="text" placeholder="Szukaj ...">
+        <button class="szukajBtn" name="submit" type="submit" id="button_submit">Szukaj</button>
+    </form>
+
+    {% if events != None%}
+{% for event in events %}
+    <div class="Obramowanie">
+            <div class="Text">
+    <h2><a href="{%url 'event_detail' pk=event.pk%}">{{event.nazwa}}</a></h2>
+    <p>Data: {{event.data_rozpoczecia}}</p>
+    <p>Lokalizacja: {{event.miejsce}}</p>
+</div>
+</div>
+    {% if request.user.is_authenticated and event.organizator.username == request.user.username %}
+    
+    {%endif%}
+    
+{%endfor%}
+    {%endif%}
+
+    {% if users != None%}
+    {% for user in users%}
+    <div class="Obramowanie">
+            <div class="Text">
+    <h2>{{user.username}}</h2>
+    <p>{{user.first_name}} {{user.last_name}}</p>
+    </div>
+    </div>
+    {%endfor%}
+    {%endif%}
+
+    {% if places != None %}
+    {%for place in places%}
+    <div class="Obramowanie">
+            <div class="Text">
+        <h1><a
+                              href="{% url 'miejsce_wydarzenia' pk=place.pk %}#">{{place.nazwa}}</a>
+    </h1>
+    <p>{{place.miasto}}</p>
+    <p>{{place.adres}}</p>
+</div>
+</div>
+    {%endfor%}
+    {%endif%}
+</div>
+{%endblock%}

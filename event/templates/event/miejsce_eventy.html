@@ -1,0 +1,102 @@
+{% extends 'Base.html' %}
+{% block title %}Nasza zespołowa aplikacja- SportCatch{% endblock %}
+{% block content %}
+<center><h2>{{nasze_miejsce}}</h2><span>
+	{% if nasze_miejsce.photo.url.value != ""%}
+		<img  height="150" src="{{nasze_miejsce.photo.url}}" alt="elo"/>
+	{% endif %}
+</span></center>
+
+<div class= Star>
+<center>
+        {% if request.user.is_authenticated %}
+        {%if Ocenione_m %}
+        Oceniles juz to miejsce
+        {%else%}
+
+        <div class="rating">
+        
+        
+        <a  href="{%url 'Ocena' ocena=6 pkmiast=nasze_miejsce.pk %}">☆</a> 
+        <a  href="{%url 'Ocena' ocena=5 pkmiast=nasze_miejsce.pk %}">☆</a> 
+        <a  href="{%url 'Ocena' ocena=4 pkmiast=nasze_miejsce.pk %}">☆</a> 
+        <a  href="{%url 'Ocena' ocena=3 pkmiast=nasze_miejsce.pk %}">☆</a> 
+        <a  href="{%url 'Ocena' ocena=2 pkmiast=nasze_miejsce.pk %}">☆</a> 
+        <a  href="{%url 'Ocena' ocena=1 pkmiast=nasze_miejsce.pk %}">☆</a>
+        :Ocena
+        </div>
+       
+    </center>
+{%endif%}
+{%endif%} 
+</div>
+<h2>Wydarzenia</h2>
+<div class="wydarzenia">
+
+<div class="Elementy_wydarzen">
+        
+    {% for event in events %}
+    <div class="Obramowanie2">
+        <div class="Text2">
+        <h2><a style="color:#67C838;text-decoration:none;" href="{% url 'event_detail' pk=event.pk %}">{{event.nazwa}}</a></h2>
+        <div class="Szara">
+    <p>Organizator: {{event.organizator}}</p>
+    <p>Data rozpoczęcia: {{event.data_rozpoczecia}}</p>
+        </div>
+        </div>
+        </div>
+    
+    {%endfor%}
+  
+</div>
+</div>
+<h3>Sekcja komentarzy:</h3>
+<div class="mar">
+
+
+    
+    {% for komentarz in komentarze %}
+  
+    <div class="komentarze">
+
+{% if komentarz.autor.username == request.user.username %}
+<div class="options">
+<a href="{% url 'delete_com' pk=nasze_miejsce.pk comPK=komentarz.pk %}" class="glyphicon glyphicon-remove">&#160;</a>
+<a href="{%url 'EditComment' pk=komentarz.pk miejscePK=nasze_miejsce.pk%}" class="glyphicon glyphicon-pencil"> </a>
+</div>
+{%endif%}
+
+
+<div class="Text2">
+<p> Autor:  {{komentarz.autor}}</p>
+<p>Dodano:  {{komentarz.data| timesince}} temu</p>
+
+</div>
+<div class= tresc>
+        <p> {{komentarz.tresc}}</p>
+</div>
+
+
+  
+    </div>
+
+    {%endfor%}
+</div>
+
+    {%if request.user.is_authenticated%}
+    {% if czy_nowy%}
+        Pomyślnie dodano komentarz!
+        {%else%}
+           
+            <form class="form" action="{{event.get_absolute_url}}" method="post">
+            {{komentarz_form.as_p}}
+            {%csrf_token%}
+            <p><input type="submit" value="Dodaj komentarz"  class="btn btn-default"></p>
+    
+        </form>
+        {%endif%}
+        {%endif%}
+    
+ 
+
+{% endblock %}

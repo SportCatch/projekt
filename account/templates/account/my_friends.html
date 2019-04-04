@@ -1,0 +1,14 @@
+{% extends "Base.html" %}
+
+{% block content %}
+<div class="informacja"> Lista Twoich znajomych:
+    {% if user.friends.all %}
+    {% for u in user.friends.all %}
+    <p><a href = "{% url 'email' nick=u %}"><button>Wyślij e-maila</button></a> <a href="{% url 'other_account_info' pk=u.user.pk %}"> {{u.user.first_name}}</a><a href="{% url 'delete_friend' pk=u.user.pk %}"> Usuń</a>
+        {% endfor %}
+    {% else %}
+    <p>brak znajomych
+    {% endif %}
+</div>
+</div>
+{% endblock content %}

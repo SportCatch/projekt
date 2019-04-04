@@ -1,0 +1,27 @@
+{% extends "Base.html" %}
+
+{% block content %}
+{% load widget_tweaks %}
+
+
+<div class="wydarzeniaForm" style="width:400px;">
+        <form method="post" enctype="multipart/form-data">
+            {%csrf_token%}
+
+            <h1>Zmiana informacji</h1>
+
+            {% render_field user_form.username class="txt"  %}
+            {% render_field user_form.email class="txt"  %}
+            {% render_field user_form.first_name class="txt" %}
+            {% render_field user_form.last_name class="txt"  %}
+            {% render_field profile_form.photo style="color:white;" %}
+            <button type="submit" class="btnForm">Zmień</button>
+            <a style="text-decoration: none;" href="{% url 'password_change' %}"><input type="button" class="btnForm" value="Zmień hasło" /></a>
+        </form>
+
+
+    </div>
+
+
+
+{% endblock content %}
