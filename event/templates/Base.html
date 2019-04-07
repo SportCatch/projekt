@@ -39,8 +39,9 @@
                 Wyloguj!
                  </a>
 			</p>
+			{% if user.photo %}
 		<img   height="100" src="{{user.photo.url}}"/>
-
+			{%endif%}
 		{% else %}
 			<div style="margin-top:60px;">
 			<a  href="{% url 'login'%}?next={{ request.path|urlencode }}" class="btn btn-success">Zaloguj się</a>

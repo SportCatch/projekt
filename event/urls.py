@@ -36,7 +36,7 @@ urlpatterns = [
     path('deleteCom3/<int:pk>/<int:comPK>/', views.Delete_Com3, name='delete_com3'),
     path('deleteAdv/<int:pk>',views.Delete_adv,name='adv_delete'),
     path('events/adv/<int:pkadv>/<int:pk>',views.EditCommentAdv,name='EditCommentAdv'),
-    path("searching",views.searching,name="searching"),
+    path("searching/",views.searching,name="searching"),
     path('Ocena/<int:ocena>/<int:pkmiast>',views.Ocenki,name='Ocena'),
 ]
 
