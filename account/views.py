@@ -16,7 +16,7 @@ def user_login(request):
 		if form.is_valid():
 			cd = form.cleaned_data
 			user = authenticate(username=cd['username'], password=cd['password'])
-			
+
 			if user is not None:
 				if user.is_active:
 					login(request, user)
@@ -30,12 +30,12 @@ def user_login(request):
 		form = LoginForm()
 
 	return render(request, 'account/login.html', {'form': form})
-	
+
 
 @login_required
 def home(request):
     return render(request, 'core/home.html',{'profiles':profiles})
-	
+
 def Logout(request):
 	logout(request)
 	return redirect('/')
@@ -46,7 +46,7 @@ def register(request):
         user_form = UserRegistrationForm(request.POST)
         if user_form.is_valid():
 
-			
+
             new_user = user_form.save(commit=False)
             new_user.set_password(user_form.cleaned_data['password'])
             new_user.save()
@@ -113,4 +113,4 @@ def delete_friend(request, pk):
     actual_user.friends.remove(deleted_friend)
     deleted_friend.friends.remove(actual_user)
     return render(request, 'account/my_friends.html',{'user':actual_user})
-    
+

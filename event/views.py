@@ -10,14 +10,12 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import CreateView, UpdateView
 from django.shortcuts import redirect
-from datetime import date
+
 register = Library()
 
 info = ["Twoje ogłoszenie zostało utworzone.",
         "Twoje wydarzenie zostało utworzone.",
         "Czeka na akceptację administratora."]
-
-
 
 
 class OgloszenieCreateView(CreateView):
@@ -84,10 +82,11 @@ def index(request):
     profiles = Profile.objects.all()
     user = Profile.objects.all()
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
-        request.session['sprawdz'] = Sprawdz(request)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
         request.session['new_notifications'] = get_amount_of_unviewed_notifications(request)
-        
     return render(request, 'index.html', {'profiles': profiles, 'user': user})
 
 
@@ -96,32 +95,11 @@ def events_list(request):
     profiles = Profile.objects.all()
     events = wydarzenie.objects.order_by('data_rozpoczecia')
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
     return render(request, 'event/events_list.html', {'events': events, 'profiles': profiles, 'user': user})
-
-
-def Sprawdz(request):
-    if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
-        id = request.user
-        Udzial = wydarzenie.objects.filter(uczestnicy=id)
-        for wyd in Udzial:
-            Data=wyd.data_rozpoczecia
-            today=date.today()
-            wynik=today-Data
-            if wynik.days ==-1:
-                pow=Powiadomienie()
-                pow.event=wyd
-                pow.recipient=request.user
-                pow.text="Za niedlugo masz wydarzenie:\n "+wyd.nazwa+" Odbedzie sie \n"+wyd.data_rozpoczecia.strftime("%Y-%m-%d %H:%M:%S")
-                pow.viewed=True
-                pow.save()
-            if wynik.days==0:
-                pow=Powiadomienie()
-                pow.recipient=request.user
-                pow.text="Dzisaj masz wydarzenie \n"+wyd.nazwa+" Odbedzie sie \n"+wyd.data_rozpoczecia.strftime("%Y-%m-%d %H:%M:%S")
-                pow.viewed=True
-                pow.save()    
 
 
 def event_delet(request, pk):
@@ -143,7 +121,10 @@ def adv_edit(request, pk):
     user = Profile.objects.all()
     adv = get_object_or_404(ogloszenie, pk=pk)
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
     if request.method == "POST":
         form = ogloszenieForm(instance=adv, data=request.POST)
         if form.is_valid():
@@ -180,7 +161,10 @@ def adv_detail(request, pk):
     user = Profile.objects.all()
     adv = get_object_or_404(ogloszenie, pk=pk)
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
     komentarze = komentarz_do_ogloszenia.objects.all()
     komentarz_form = None
     czy_nowy_komentarz = False
@@ -204,7 +188,10 @@ def event_detail(request, pk):
     user = Profile.objects.all()
     event = get_object_or_404(wydarzenie, pk=pk)
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
     uczestnicy = event.uczestnicy.all()
     komentarze = komentarz_do_wydarzenia.objects.filter(wydarzenie=event.id)
     komentarz_form = None
@@ -246,7 +233,7 @@ def take_part(request, event_id):
 
 def get_notifications(request):
     '''Wyświetlenie wszystkich powiadomień dla danego użytkownika.'''
-   
+
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
     notifications = Powiadomienie.objects.all().filter(recipient=request.user)
@@ -268,14 +255,14 @@ def get_amount_of_unviewed_notifications(request):
 def get_self_events(request):
     user = Profile.objects.all()
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
         id = request.user
         Wlasne = wydarzenie.objects.filter(organizator=id)
         Udzial = wydarzenie.objects.filter(uczestnicy=id)
-       
-        
-        
-        context = {'Wlasne': Wlasne, 'Udzial': Udzial, 'user': user,'userr':id}
+        context = {'Wlasne': Wlasne, 'Udzial': Udzial, 'user': user}
         return render(request, 'event/moje_wydarzenia.html', context)
     return redirect('login')
 
@@ -309,7 +296,10 @@ def make_name(profiles):
 def new_chat(request):
     user = Profile.objects.all()
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
         if request.method == 'POST':
             form = CzatForm(request.user, request.POST)
             if form.is_valid():
@@ -330,7 +320,10 @@ def new_chat(request):
 
 def concrete_chat(request, pk_chat):
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
     czat = Czat.objects.get(id=pk_chat)
     if not ((request.user not in czat.uzytkownicy.all()) or (request.user != czat.autor.user)):
         return HttpResponseRedirect(reverse('new_chat', {'user': user}))
@@ -353,7 +346,10 @@ def concrete_chat(request, pk_chat):
 def success_info(request, pk):
     user = Profile.objects.all()
     if not request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
         return reverse_lazy('index')
 
     context = {'info': info[pk], 'user': user}
@@ -364,7 +360,10 @@ def ListaMiejsc(request):
     user = Profile.objects.all()
 
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = User.objects.get(id = request.user.id)
 
     miejsca_lista = miejsce.objects.all()
     profiles = Profile.objects.all()
@@ -394,37 +393,16 @@ def Ocenki(request, ocena, pkmiast):
     return HttpResponseRedirect(reverse('place_list'))
 
 
-
-def Ocenki_w(request, ocena, pkwydarzeni):
-    oceniane = wydarzenie.objects.get(pk=pkwydarzeni)
-    user = request.user
-    Spraw = Ocena_wydarzenia.objects.filter(user=user, wydarzenie=oceniane)
-    if not Spraw:
-        nowa = Ocena_wydarzenia()
-        nowa.wydarzenie = oceniane
-        nowa.user = user
-        nowa.ocena = ocena
-        nowa.save()
-        Srednia = Ocena_wydarzenia.objects.filter(wydarzenie=oceniane)
-        srednia = 0
-        ile = 0
-        for a in Srednia:
-            srednia = srednia + a.ocena
-            ile = ile + 1
-        oceniane.Srednia_ocen = srednia / ile
-        oceniane.save()
-
-    return HttpResponseRedirect(reverse('place_list'))
-
-
-
 def Miejsce_wydarzenia(request, pk):
     user = Profile.objects.all()
     nasze_miejsce = miejsce.objects.get(pk=pk)
     events = wydarzenie.objects.all().filter(miejsce=nasze_miejsce)
     czy_oceniny = False
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
         ocena = Ocena.objects.filter(user=request.user)
 
         for pom in ocena:
@@ -480,7 +458,10 @@ def Delete_Com3(reqest, pk, comPK):
 def Edite_place(request, pk):
     user = Profile.objects.all()
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
     a = miejsce.objects.get(pk=pk)
     if request.method == 'POST':
         miejsce_form = miejsceEditForm(instance=a, data=request.POST)
@@ -515,7 +496,10 @@ def Accept(self, pk):
 def EditComment(request, pk, miejscePK):
     user = Profile.objects.all()
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
     komentarz = komentarz_do_miejsca.objects.get(pk=pk)
     if request.method == 'GET':
         komentarz_form = CommentEditForm(instance=komentarz, data=request.POST)
@@ -536,7 +520,10 @@ def EditCommentAdv(request, pk, pkadv):
     komentarz = komentarz_do_ogloszenia.objects.get(pk=pk)
     user = Profile.objects.all()
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
     if request.method == 'GET':
         komentarz_form = CommentEditForm(instance=komentarz, data=request.POST)
         if komentarz_form.is_valid():
@@ -555,7 +542,10 @@ def EditCommentAdv(request, pk, pkadv):
 def AdvList(request):
     user = Profile.objects.all()
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
     lista = ogloszenie.objects.all()
     return render(request, 'event/adv_list.html', {'lista': lista, 'user': user})
 
@@ -566,7 +556,10 @@ def searching(request):
     places = None
     user = Profile.objects.all()
     if request.user.is_authenticated:
-        user = Profile.objects.get(user=request.user)
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
     if request.method == 'GET':
         search_phrase = request.GET.get("search_phrase", None)
         choice = request.GET.get("wybor", None)

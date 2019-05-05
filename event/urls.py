@@ -38,7 +38,6 @@ urlpatterns = [
     path('events/adv/<int:pkadv>/<int:pk>',views.EditCommentAdv,name='EditCommentAdv'),
     path("searching/",views.searching,name="searching"),
     path('Ocena/<int:ocena>/<int:pkmiast>',views.Ocenki,name='Ocena'),
-    path('Ocena_w/<int:ocena>/<int:pkwydarzeni>',views.Ocenki_w,name='Ocena_w'),
 ]
 
 if settings.DEBUG:

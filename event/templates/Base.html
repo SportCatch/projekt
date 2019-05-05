@@ -82,6 +82,7 @@
 					</ul>
 				</li>
 				{% if request.user.is_authenticated%}
+				{% if not request.user.username == 'admin' %}
 				<li><a href="#">Znajomi</a>
 					<ul>
 						<li><a href="{% url 'searching' %}">Szukaj</a></li>
@@ -91,7 +92,9 @@
 					</ul>
 				</li>
 				{%endif%}
+				{%endif%}
 				{% if request.user.is_authenticated%}
+				{% if not request.user.username == 'admin' %}
 				<li><a href="{% url 'my_account' %}">Moje konto</a></li>
 				<li>{% if request.session.new_notifications != null %}
 					<a href="{% url 'get_notifications'%}">{{request.session.new_notifications}}</a>
@@ -99,6 +102,7 @@
 					<a href="{% url 'get_notifications'%}">Powiadomienia</a>
 					{% endif %}
 				</li>
+				{%endif%}
 				{%endif%}
 				<li><a href="#">Autorzy</a></li>
 				<li><a href="{%url 'searching' %}">Wyszukaj</a></li>

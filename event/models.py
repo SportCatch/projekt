@@ -45,7 +45,6 @@ class wydarzenie(models.Model):
     organizator=models.ForeignKey(User,on_delete=models.CASCADE,related_name='wydarzenia')
     opis=models.TextField()
     uczestnicy=models.ManyToManyField(User,related_name="uczestnicy")
-    Srednia_ocen=models.IntegerField( default=0)
     photo = models.ImageField(upload_to="wydarzenia/", blank=True, default='miejsca/Default.jpg')
     def __str__(self):
         return self.nazwa
@@ -97,17 +96,6 @@ class Ocena(models.Model):
     ocena=models.IntegerField()
     def __str__(self):
         return str(self.ocena)
-
-
-
-class Ocena_wydarzenia(models.Model):
-    wydarzenie=models.ForeignKey(wydarzenie,on_delete=models.CASCADE,null=False)
-    user=models.ForeignKey(User,on_delete=models.CASCADE,null=False)
-    ocena=models.IntegerField()
-    def __str__(self):
-        return str(self.ocena)
-
-
         
 class rate_user(models.Model):
     evaluative=models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="evaluative")
