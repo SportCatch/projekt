@@ -10,12 +10,14 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import CreateView, UpdateView
 from django.shortcuts import redirect
-
+from datetime import date
 register = Library()
 
 info = ["Twoje ogłoszenie zostało utworzone.",
         "Twoje wydarzenie zostało utworzone.",
         "Czeka na akceptację administratora."]
+
+
 
 
 class OgloszenieCreateView(CreateView):
@@ -83,7 +85,9 @@ def index(request):
     user = Profile.objects.all()
     if request.user.is_authenticated:
         user = Profile.objects.get(user=request.user)
+        request.session['sprawdz'] = Sprawdz(request)
         request.session['new_notifications'] = get_amount_of_unviewed_notifications(request)
+        
     return render(request, 'index.html', {'profiles': profiles, 'user': user})
 
 
@@ -94,6 +98,30 @@ def events_list(request):
     if request.user.is_authenticated:
         user = Profile.objects.get(user=request.user)
     return render(request, 'event/events_list.html', {'events': events, 'profiles': profiles, 'user': user})
+
+
+def Sprawdz(request):
+    if request.user.is_authenticated:
+        user = Profile.objects.get(user=request.user)
+        id = request.user
+        Udzial = wydarzenie.objects.filter(uczestnicy=id)
+        for wyd in Udzial:
+            Data=wyd.data_rozpoczecia
+            today=date.today()
+            wynik=today-Data
+            if wynik.days ==-1:
+                pow=Powiadomienie()
+                pow.event=wyd
+                pow.recipient=request.user
+                pow.text="Za niedlugo masz wydarzenie:\n "+wyd.nazwa+" Odbedzie sie \n"+wyd.data_rozpoczecia.strftime("%Y-%m-%d %H:%M:%S")
+                pow.viewed=True
+                pow.save()
+            if wynik.days==0:
+                pow=Powiadomienie()
+                pow.recipient=request.user
+                pow.text="Dzisaj masz wydarzenie \n"+wyd.nazwa+" Odbedzie sie \n"+wyd.data_rozpoczecia.strftime("%Y-%m-%d %H:%M:%S")
+                pow.viewed=True
+                pow.save()    
 
 
 def event_delet(request, pk):
@@ -218,7 +246,7 @@ def take_part(request, event_id):
 
 def get_notifications(request):
     '''Wyświetlenie wszystkich powiadomień dla danego użytkownika.'''
-
+   
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
     notifications = Powiadomienie.objects.all().filter(recipient=request.user)
@@ -244,7 +272,10 @@ def get_self_events(request):
         id = request.user
         Wlasne = wydarzenie.objects.filter(organizator=id)
         Udzial = wydarzenie.objects.filter(uczestnicy=id)
-        context = {'Wlasne': Wlasne, 'Udzial': Udzial, 'user': user}
+       
+        
+        
+        context = {'Wlasne': Wlasne, 'Udzial': Udzial, 'user': user,'userr':id}
         return render(request, 'event/moje_wydarzenia.html', context)
     return redirect('login')
 
@@ -361,6 +392,30 @@ def Ocenki(request, ocena, pkmiast):
         oceniane.save()
 
     return HttpResponseRedirect(reverse('place_list'))
+
+
+
+def Ocenki_w(request, ocena, pkwydarzeni):
+    oceniane = wydarzenie.objects.get(pk=pkwydarzeni)
+    user = request.user
+    Spraw = Ocena_wydarzenia.objects.filter(user=user, wydarzenie=oceniane)
+    if not Spraw:
+        nowa = Ocena_wydarzenia()
+        nowa.wydarzenie = oceniane
+        nowa.user = user
+        nowa.ocena = ocena
+        nowa.save()
+        Srednia = Ocena_wydarzenia.objects.filter(wydarzenie=oceniane)
+        srednia = 0
+        ile = 0
+        for a in Srednia:
+            srednia = srednia + a.ocena
+            ile = ile + 1
+        oceniane.Srednia_ocen = srednia / ile
+        oceniane.save()
+
+    return HttpResponseRedirect(reverse('place_list'))
+
 
 
 def Miejsce_wydarzenia(request, pk):

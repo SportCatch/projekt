@@ -1,12 +1,23 @@
 ﻿{% extends 'Base.html' %}
 
 {% block content %}
+		<center>
 		{% for message in messages %}
 		
-		<div class="message">
-			{{ message.autor.user.username}}: {{message.tresc}}
+		
+		{% if message.autor.user.username == request.user.username %}
+		<div class="mymessage">
+			{{message.tresc}}
 				<div class="date-message">{{ message.data_utworzenia }}</div>
-		</div>
+				</div>
+		{% else %}
+			<div class="message">
+			{{ message.autor.user.username}}: {{message.tresc}}
+				<div class="date-message"><notmy>{{ message.data_utworzenia }}</notmy></div>
+				</div>
+		{% endif %}
+		
+		
 		{% endfor %}
 	
 	 <form method="post">
@@ -14,4 +25,5 @@
 		{{ form }}
 		<br/>
     <input type="submit" value="Wyślij">
+	</center>
 {% endblock %}
