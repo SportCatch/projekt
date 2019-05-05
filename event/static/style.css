@@ -315,7 +315,7 @@ display:block;
 { width: 100%;
    margin: 10px 10px 10px 10px;
    background-color: #222222;
-   height: 30px;
+   height: 40px;
    padding-left: 10px;
    padding-top: 5px;
    text-align:center-left;
@@ -330,19 +330,35 @@ display:block;
 
 .message
 {
-   width: 100%;
+   width: 50%;
    margin: 10px 10px 10px 0px;
-   background-color: #222222;
-   height: 40px;
+   background-color: #348a34;
+   height: 50px;
    padding-left: 10px;
    padding-top: 5px;
-   text-align:center-left;
+   text-align:left;
+   border-radius: 18px;
+}
+
+.mymessage {
+   width: 50%;
+   margin: 10px 10px 10px 0px;
+   background-color: #222222;
+   height: 50px;
+   padding-right: 10px;
+   padding-top: 5px;
+   text-align: right;
+   border-radius: 18px;
 }
 
 .date-message
 {
 	font-size: 11px;
 	color: #636363;
+}
+
+.date-message > notmy {
+	color: #ededed;
 }
 
 .friends
@@ -597,12 +613,62 @@ input, select, textarea{
    position: absolute;
 }
 
+
+
+
+
+
+
+
+
+
+
 .wydarzenia
 {
 
 	text-align: center;
 
 }
+
+
+
+.rating1 > a:hover:before {
+	content: "\2605";
+	position: absolute;
+ }
+
+
+
+  .rating1 > a:hover:before,
+  .rating1 > a:hover ~ a:before {
+	 content: "\2605";
+	 position: absolute;
+  }
+  .rating1  {
+	unicode-bidi: embed;
+	direction: rtl;
+	float: right;
+
+  }
+
+  .rating1 > a {
+	display: inline-block;
+	unicode-bidi: bidi-override;
+	direction: rtl;
+	position: relative;
+	width: 1.1em;
+  }
+
+  .rating1 > a:hover:before,
+.rating1 > a:hover ~ span:before {
+   content: "\2605";
+   position: absolute;
+}
+
+
+
+
+
 
 .Elementy_wydarzen
 {
@@ -748,7 +814,12 @@ input, select, textarea{
 	height: 50px;
 	width: 16000px;
 }
+.Star1
+{
+	font-size:20px;
 
+
+}
 .Szara
 {
 	text-align: center;
