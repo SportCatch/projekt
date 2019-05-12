@@ -1,25 +1,23 @@
 
 
-{% extends 'Base.html' %}
+{% extends 'base.html' %}
 {% load widget_tweaks %}
 {% block content %}
 {% load widget_tweaks %}
 <div class="wydarzeniaForm" style="width:500px;">
 	<form method="post" enctype="multipart/form-data">{%csrf_token %}
 
-	<div class="wydarzeniaForm" style="width:500px;">
+		{{form.non_field_errors }}
+		<h2>Dodaj ogłoszenie</h2>
+		{% render_field form.tytul class="txt" placeholder=form.tytul.name %}
 
-		<form method = "post" enctype="multipart/form-data">
-			{%csrf_token %}
-			<h1>Dodaj Ogłoszenie</h1>
-			{% render_field form.tytul class="txt" placeholder=form.tytul.name %}
-			{% render_field form.opis class="txt" placeholder=form.opis.name %}
-			 <button type="submit" class="btnForm">Dodaj ogłoszenie</button>
-		</form>
+		{% render_field form.opis class="txt" placeholder=form.opis.name %}
 
+		{% render_field form.zdjecie class="txt" %}
+		<button type="submit">Dodaj ogłoszenie</button>
+	</form>
+</div>
 
-	</div>
-
-
+	
 {% endblock %}
 
