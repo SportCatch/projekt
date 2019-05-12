@@ -41,7 +41,7 @@ INSTALLED_APPS = [
 	'social_django',
     'event',
     'widget_tweaks',
-	'emoticons',
+    'emoticons',
 
 ]
 MIDDLEWARE = [
