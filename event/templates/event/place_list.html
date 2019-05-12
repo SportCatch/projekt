@@ -6,7 +6,7 @@
 <div style="background-color:#383a3d;padding:10px; border-radius: 9px">
 {% for miejsce in miejsca %}
     {% if request.user.username == 'admin'%}
-    <a style="color:white;text-decoration:none;" href="{% url 'Edite_place' pk=miejsce.pk %}" class="glyphicon glyphicon-pencil"></a>
+    <a style="color:white;text-decoration:none;" href="{% url 'edit_miejsce' pk=miejsce.pk %}" class="glyphicon glyphicon-pencil"></a>
     <a style="color:white;text-decoration:none;" href="{% url 'Delete_place' pk=miejsce.pk %}" class="glyphicon glyphicon-remove"></a>
      {%if miejsce.zaakceptowane == False%}
         <a style="color:white;text-decoration:none;" href="{% url 'Accept' pk=miejsce.pk %}" class="glyphicon glyphicon-ok"></a>
@@ -19,8 +19,8 @@
     <p>Miasto: {{miejsce.miasto}}</p>
     <p>Adres: {{miejsce.adres}}</p>
     <p>Ocena :{{miejsce.Srednia_ocen}}</p>
-
-
+    
+    
 
 
     </div>
@@ -29,5 +29,5 @@
     <hr/>
 {%endfor%}
    </div>
-
+    
 {% endblock %}

@@ -32,14 +32,16 @@
 		<div class="login" >
 		{% if request.user.is_authenticated%}
 			<p>
-			Hej, {{ request.user.username }}!
+			Witaj, {{ request.user.username }}!
 			<span><img height="100" src="{{profiles.photo.url}}" /></span>
+				
 			<a href="{% url 'logout' %}" class="btn btn-success">
 
                 Wyloguj!
                  </a>
 			</p>
-			{% if user.photo %}
+			{% if user.photo %} <p></p>
+
 		<img   height="100" src="{{user.photo.url}}"/>
 			{%endif%}
 		{% else %}
@@ -82,7 +84,6 @@
 					</ul>
 				</li>
 				{% if request.user.is_authenticated%}
-				{% if not request.user.username == 'admin' %}
 				<li><a href="#">Znajomi</a>
 					<ul>
 						<li><a href="{% url 'searching' %}">Szukaj</a></li>
@@ -92,9 +93,7 @@
 					</ul>
 				</li>
 				{%endif%}
-				{%endif%}
 				{% if request.user.is_authenticated%}
-				{% if not request.user.username == 'admin' %}
 				<li><a href="{% url 'my_account' %}">Moje konto</a></li>
 				<li>{% if request.session.new_notifications != null %}
 					<a href="{% url 'get_notifications'%}">{{request.session.new_notifications}}</a>
@@ -103,8 +102,7 @@
 					{% endif %}
 				</li>
 				{%endif%}
-				{%endif%}
-				<li><a href="#">Autorzy</a></li>
+				<li><a href="{% url 'authors' %}">Autorzy</a></li>
 				<li><a href="{%url 'searching' %}">Wyszukaj</a></li>
 			</ol>
 
