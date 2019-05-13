@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-{% extends 'base.html' %}
+{% extends 'Base.html' %}
 
 {% block content %}
 <h2>Moje Wydarzenia</h2>
 <div class="wydarzenia">
 		<div class="Elementy_wydarzen">
-			
+
 		{% for event in Wlasne %}
 		<div class="Obramowanie">
 		<div class="Text">
 
-			
+
 			<h2><a href="{%url 'event_detail' pk=event.pk%}">{{event.nazwa}}</a></h2>
 			<p>Data: {{event.data_rozpoczecia}}</p>
 			<p>Lokalizacja: {{event.miejsce}}</p>
@@ -24,11 +24,11 @@
 			</div>
 			{%endif%}
 			</div>
-			
+
 		{%endfor%}
 	</div>
 	</div>
-		
+
 <!--################################-->
 
 
@@ -51,26 +51,26 @@
 			<!--{%endif%}-->
 
 
-				
+
 
 				</div>
 				<div class= Star1>
 		{% load filter %}
         {% if request.user.is_authenticated %}
         {% if event.pk|is_ok:userr %}
-		
 
-        
+
+
         {%else%}
 
         <div class="rating1">
-        
-        
-        <a  href="{%url 'Ocena_w' ocena=6 pkwydarzeni=event.pk %}">☆</a> 
-        <a  href="{%url 'Ocena_w' ocena=5 pkwydarzeni=event.pk %}">☆</a> 
-        <a  href="{%url 'Ocena_w' ocena=4 pkwydarzeni=event.pk %}">☆</a> 
-        <a  href="{%url 'Ocena_w' ocena=3 pkwydarzeni=event.pk %}">☆</a> 
-        <a  href="{%url 'Ocena_w' ocena=2 pkwydarzeni=event.pk %}">☆</a> 
+
+
+        <a  href="{%url 'Ocena_w' ocena=6 pkwydarzeni=event.pk %}">☆</a>
+        <a  href="{%url 'Ocena_w' ocena=5 pkwydarzeni=event.pk %}">☆</a>
+        <a  href="{%url 'Ocena_w' ocena=4 pkwydarzeni=event.pk %}">☆</a>
+        <a  href="{%url 'Ocena_w' ocena=3 pkwydarzeni=event.pk %}">☆</a>
+        <a  href="{%url 'Ocena_w' ocena=2 pkwydarzeni=event.pk %}">☆</a>
         <a  href="{%url 'Ocena_w' ocena=1 pkwydarzeni=event.pk %}">☆</a>
         :Ocena
         </div>

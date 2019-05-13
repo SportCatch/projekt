@@ -34,7 +34,7 @@
 			<p>
 			Witaj, {{ request.user.username }}!
 			<span><img height="100" src="{{profiles.photo.url}}" /></span>
-				
+
 			<a href="{% url 'logout' %}" class="btn btn-success">
 
                 Wyloguj!
@@ -83,6 +83,7 @@
 
 					</ul>
 				</li>
+				{% if not request.user.username == 'admin' %}
 				{% if request.user.is_authenticated%}
 				<li><a href="#">Znajomi</a>
 					<ul>
@@ -101,6 +102,7 @@
 					<a href="{% url 'get_notifications'%}">Powiadomienia</a>
 					{% endif %}
 				</li>
+				{%endif%}
 				{%endif%}
 				<li><a href="{% url 'authors' %}">Autorzy</a></li>
 				<li><a href="{%url 'searching' %}">Wyszukaj</a></li>
