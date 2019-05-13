@@ -112,8 +112,12 @@
 
 		<div class="content">
 			{% block content %}
+			{% load emoticons_tags %}
+			{% emoticons %}
+
 			<div class="slider1" onload=zmienslajd()>
 			</div>
+			{% endemoticons %}
 			{% endblock content %}
 		</div>
 

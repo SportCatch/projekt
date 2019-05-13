@@ -1,6 +1,9 @@
 ﻿{% extends 'Base.html' %}
+{% load emoticons_tags %}
+
 
 {% block content %}
+{% emoticons %}
 <div class="friends">
     <b>Zaproś znajomych do rozmowy</b>
   <form method="post">
@@ -12,4 +15,5 @@
     {% endfor %}
     <input type="submit" value="Utwórz" class="btn btn-success">
 	</div>
+	{% endemoticons %}
 {% endblock %}
