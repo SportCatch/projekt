@@ -12,7 +12,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.shortcuts import redirect
 from datetime import date
 register = Library()
-
+import sys
 info = ["Twoje ogłoszenie zostało utworzone.",
         "Twoje wydarzenie zostało utworzone.",
         "Czeka na akceptację administratora."]
@@ -638,3 +638,14 @@ def searching(request):
 def authors(request):
     return render(request,'event/authors.html',{})
 
+def checkUser(request):
+  #  social_user = request.user.social_auth.filter(
+    #    provider='facebook').first()
+    try:
+        profile = Profile.objects.get(user = request.user)
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user = request.user )
+        profile.save()
+        print("Dodanie nowego użytkownika facebook'a",file=sys.stderr)
+
+    return redirect('index')

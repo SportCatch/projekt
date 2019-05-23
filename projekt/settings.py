@@ -54,7 +54,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 	'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
-
 ROOT_URLCONF = 'projekt.urls'
 
 TEMPLATES = [
@@ -76,13 +75,26 @@ TEMPLATES = [
         },
     },
 ]
-LOGIN_REDIRECT_URL = '/'
+#LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'index'
 
+LOGIN_REDIRECT_URL = 'checkUser'
+
+# SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+# FACEBOOK_STORE_LOCAL_IMAGE = False
 SOCIAL_AUTH_FACEBOOK_KEY = '372340516641928'
 SOCIAL_AUTH_FACEBOOK_SECRET = '285edeccd73259b42b3d6e55a27444b8'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email'] # add this
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {       # add this
+      'fields': 'id, name, email, picture.type(large)'
+    }
+SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [                 # add this
+        ('name', 'name'),
+        ('email', 'email'),
+        ('picture', 'picture'),
+        ('link', 'profile_url'),
+    ]
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST='smtp.gmail.com'
