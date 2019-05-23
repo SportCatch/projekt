@@ -25,7 +25,7 @@ SECRET_KEY = 'x*j9bp3@#5m9j5$5)8o8x!k1wklgmh%5fw=75zsr)3v0cpu^=2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['SportCatch.pythonanywhere.com']
 
 
 # Application definition
@@ -67,10 +67,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-				
+
 				'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
-				
+
             ],
         },
     },
@@ -78,7 +78,7 @@ TEMPLATES = [
 #LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-
+# LOGIN_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'checkUser'
 
 # SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
@@ -156,13 +156,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 
-STATICFILES_DIRS = (
-	os.path.join(BASE_DIR, "static"),
-)
+# STATICFILES_DIRS = (
+# 	os.path.join(BASE_DIR, "static"),
+# )
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/projekt/event/static/'
+STATIC_ROOT = 'home/SportCatch/projekt/event/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
 
