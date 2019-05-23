@@ -40,7 +40,7 @@ urlpatterns = [
     path('Ocena/<int:ocena>/<int:pkmiast>',views.Ocenki,name='Ocena'),
     path('Ocena_w/<int:ocena>/<int:pkwydarzeni>',views.Ocenki_w,name='Ocena_w'),
     path("authors/", views.authors, name="authors"),
-
+    path("checkUser/", views.checkUser, name="checkUser"),
 ]
 
 if settings.DEBUG:
