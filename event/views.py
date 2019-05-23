@@ -19,7 +19,6 @@ info = ["Twoje ogłoszenie zostało utworzone.",
 
 
 
-
 class OgloszenieCreateView(CreateView):
     profiles = Profile.objects.all()
     model = ogloszenie
@@ -638,3 +637,4 @@ def searching(request):
 
 def authors(request):
     return render(request,'event/authors.html',{})
+

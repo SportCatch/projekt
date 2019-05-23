@@ -41,6 +41,7 @@ urlpatterns = [
     path('Ocena_w/<int:ocena>/<int:pkwydarzeni>',views.Ocenki_w,name='Ocena_w'),
     path("authors/", views.authors, name="authors"),
 
+
 ]
 
 if settings.DEBUG:

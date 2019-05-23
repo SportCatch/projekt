@@ -4,29 +4,30 @@
 {% load widget_tweaks %}
 {% block content %}
 
-
-
-
+<body>
 <div class="registerForm">
 
     <form  method = "POST" action="." enctype="multipart/form-data">
     {% csrf_token %}
     <h1>Utwórz konto</h1>
-        {% render_field user_form.username class="txt" placeholder="Login" %}
+        {% render_field user_form.username class="txt" placeholder="Nick" %}
 
-        {% render_field user_form.password class="txt" placeholder=user_form.password.name %}
+        {% render_field user_form.password class="txt" placeholder="Hasło" %}
 
-        {% render_field user_form.password2 class="txt" placeholder=user_form.password2.name %}
+        {% render_field user_form.password2 class="txt" placeholder="Powtórz hasło" %}
 
-        {% render_field user_form.email class="txt" placeholder=user_form.email.name %}
+        {% render_field user_form.email class="txt" placeholder="E-mail" %}
 
-        {% render_field user_form.first_name class="txt" placeholder=user_form.first_name.name %}
+        {% render_field user_form.first_name class="txt" placeholder="Imię" %}
 
-        {% render_field user_form.last_name class="txt" placeholder=user_form.last_name.name %}
+        {% render_field user_form.last_name class="txt" placeholder="Nazwisko" %}
 
-        <button type="submit"  class="btnForm">Zarejestruj</button>
+        <button type="submit" class="btnForm" id="zarejestrujBtn">Zarejestruj</button>
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
     </form>
-
 </div>
+<input type="checkbox" id = "klauzula1"> Wyrażam zgodę na przetwarzanie moich danych osobowych dla potrzeb rekrutacji (zgodnie z art. 6 ust. 1 lit. a Rozporządzenia Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (ogólne rozporządzenie o ochronie danych)).<p><p>
+<input type="checkbox" id="klauzula2"> Akceptuję <a href="{% url 'regulamin'%}"> regulamin </a> serwisu.
+</body>
 
 {% endblock %}

@@ -26,6 +26,7 @@ class UserRegistrationForm(forms.ModelForm):
                                widget=forms.PasswordInput)
     password2 = forms.CharField(label='Powtórz hasło',
                                 widget=forms.PasswordInput)
+
     class Meta:
         model = User
         fields = ('username', 'first_name', 'email', 'last_name')
@@ -37,7 +38,6 @@ class UserRegistrationForm(forms.ModelForm):
         return cd['password2']
 
 class EditProfieForm (forms.ModelForm):
-
     class Meta:
         model = Profile
         fields = {'photo'}

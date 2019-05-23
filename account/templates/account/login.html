@@ -2,8 +2,7 @@
 {% block content %}
 
 
-
-<form class="form" action="." method = "post" style="position: relative; left:32%;">
+<form class="form" action="." method = "post" style="position: fixed; left:36%;">
 	<h2 style = "color:	#459b45; font-weight: bold;"> Logowanie </h2><br>
 	{% csrf_token %}
 
@@ -23,5 +22,5 @@
 	<input type="hidden" name="next" value="{{ request.GET.next }}">
 
 </form>
-</div>
+
 {% endblock %}

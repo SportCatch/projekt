@@ -2,9 +2,10 @@
 <html lang="pl">
 
 <head>
-
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width">
+	<script type="text/javascript" src="skrypt.js"></script>
 
 	<title>SportCatch</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -14,44 +15,35 @@
 	<link href='http://fonts.googleapis.com/css?family=Lato:400,700&subset=latin,latin-ext' rel='stylesheet'
 		type='text/css'>
 
-	<link href="css/fontello.css" rel="stylesheet" type="text/css" />
-
-
+	<link href="css/fontello.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
-
 	<div class="wrapper">
 		<div class="header">
 			<div class="logo">
-				<a  href="{% url 'index' %}"><img src="/static/images/sportcatch.svg"/></a>
-
-
+				<a  href="{% url 'index' %}"><img src="/static/images/sportcatch.svg" width="80%"/></a>
 			</div>
 		</div>
-		<div class="login" >
-		{% if request.user.is_authenticated%}
-			<p>
-			Witaj, {{ request.user.username }}!
-			<span><img height="100" src="{{profiles.photo.url}}" /></span>
 
-			<a href="{% url 'logout' %}" class="btn btn-success">
-
-                Wyloguj!
-                 </a>
-			</p>
+			{% if request.user.is_authenticated %}<p>	
+				Witaj, {{ request.user.username }}!
+				<span><img height="100" src="{{profiles.photo.url}}" /></span>
+				<a href="{% url 'logout' %}" class="btn btn-success"> Wyloguj!</a></p>
 			{% if user.photo %} <p></p>
 
-		<img   height="100" src="{{user.photo.url}}"/>
-			{%endif%}
-		{% else %}
-			<div style="margin-top:60px;">
-			<a  href="{% url 'login'%}?next={{ request.path|urlencode }}" class="btn btn-success">Zaloguj się</a>
-			<span >lub</span>
-			<a href="{% url 'register' %}"  class="btn btn-danger">Zarejestruj się</a>
-				</div>
+		<img  height="100" src="{{user.photo.url}}"/>
 			{% endif %}
-		</div>
+		{% else %}
+		
+			<div class="header2">
+			<div class="pull-right">
+				<a  href="{% url 'login'%}" class="btn btn-success ">Zaloguj się</a>
+				<span class="">lub</span>
+				<a href="{% url 'register' %}"  class="btn btn-danger ">Zarejestruj się</a>
+				{% endif %}
+			</div>
+			</div>
 
 		<div class="nav">
 			<ol>
@@ -153,6 +145,46 @@
 
 	</script>
 
+	<script>
+ 		var checker = document.getElementById('klauzula1');
+  		var checker2 = document.getElementById('klauzula2');
+ 		var sendbtn = document.getElementById('zarejestrujBtn');
+
+		if(this.checked){
+    		sendbtn.disabled = false;
+			sendbtn.style = "background-color:#459b45;";
+			
+		} else {
+			sendbtn.style = "background-color:grey;";
+    		sendbtn.disabled = true;
+		}
+
+		checker.onchange = function(){
+			if(this.checked && checker2.checked){
+    		sendbtn.disabled = false;
+			sendbtn.style = "background-color:#459b45;";
+			
+		} else {
+			sendbtn.style = "background-color:grey;";
+    		sendbtn.disabled = true;
+		}
+		}
+
+		checker2.onchange = function(){
+			if(this.checked && checker.checked){
+    		sendbtn.disabled = false;
+			sendbtn.style = "background-color:#459b45;";
+			
+		} else {
+			sendbtn.style = "background-color:grey;";
+    		sendbtn.disabled = true;
+		}
+		}
+
+
+
+
+	</script>
 </body>
 
 </html>

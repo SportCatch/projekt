@@ -4,7 +4,7 @@
 <div class="infoView">
     {% if user.user.photo %}
     <span><img  height="150" src="{{user.photo.url}}"/></span>
-    {%endif%}
+    {% endif %}
     <div class="informacja"></div>
     <div class="informacja"> Imie: {{user.user.first_name}} </div>
     <div class="informacja"> Nazwisko: {{user.user.last_name}} </div>

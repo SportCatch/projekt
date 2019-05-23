@@ -208,18 +208,25 @@ display:block;
   cursor:pointer;
   transition: 0.8s;
 }
+
 .btnForm:hover{
   transform: scale(0.96);
 }
-.wrapper
-{
-	width: 100%;
+
+.logowanieRejestracja{
+  position: relative;
+  margin-top: 20px;
+  margin-right: 30px;
 }
 
 .header
 {
-	width:100%;
-	padding: 0 0 80px;
+	padding: 0 0 80px 0;
+}
+
+.header2
+{
+	padding: 0 0 50px 0;
 }
 
 .login
@@ -229,7 +236,7 @@ display:block;
 	width: 400px;
 	top:0%;
 	left:70%;
-
+    
 	margin-bottom: 5px;
 
 }
@@ -248,10 +255,7 @@ display:block;
 
 .logo
 {
-	width: 450px;
-	font-size: 48px;
 	margin-left: 10px;
-	margin-top: 10px;
 	margin-right: auto;
     float: left;
 }
@@ -778,7 +782,7 @@ input, select, textarea{
 .options1
 {
 	margin: 5px;
-	margin-top: 100px;
+	margin-top: 100px;	
 	float: inline-end;
 	color: #222222;
 }
@@ -932,5 +936,23 @@ margin-left: 333px;
 .ranga{
     width:50%;
     height:50%;
+}
+
+.regulamin{
+  background:white;
+  color: black;
+  padding: 15px 15px 15px 15px;
+}
+
+.regulamin b{
+  font-size: 30px;
+}
+
+.regulamin p{
+  padding: 0px 15px 15px 15px;
+}
+
+.podpunkty{
+  padding: 0px 30px 0px 40px
 }
 

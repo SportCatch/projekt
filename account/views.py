@@ -41,21 +41,17 @@ def Logout(request):
 	return redirect('/')
 
 def register(request):
-
-    if request.method == 'POST':
-        user_form = UserRegistrationForm(request.POST)
-        if user_form.is_valid():
-
-			
-            new_user = user_form.save(commit=False)
-            new_user.set_password(user_form.cleaned_data['password'])
-            new_user.save()
-            profile = Profile.objects.create(user=new_user)
-
-            return render(request,'account/login.html',{'form':LoginForm()})
-    else:
-        user_form = UserRegistrationForm()
-    return render(request,'account/register.html',{'user_form': user_form})
+	if request.method == 'POST':
+		user_form = UserRegistrationForm(request.POST)
+		if user_form.is_valid():
+			new_user = user_form.save(commit=False)
+			new_user.set_password(user_form.cleaned_data['password'])
+			new_user.save()
+			profile = Profile.objects.create(user=new_user)
+			return redirect('/account/login')
+	else:
+		user_form = UserRegistrationForm()
+	return render(request,'account/register.html',{'user_form': user_form})
 
 
 @login_required
@@ -114,3 +110,5 @@ def delete_friend(request, pk):
     deleted_friend.friends.remove(actual_user)
     return render(request, 'account/my_friends.html',{'user':actual_user})
     
+def regulamin(request):
+    return render(request, 'account/regulamin.html', {})

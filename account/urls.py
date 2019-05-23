@@ -35,6 +35,7 @@ urlpatterns = [
 	path('account_info/<int:pk>',views.other_account_info,name='other_account_info'),
 	path('incorrect_login/', views.user_login, name='incorrect_login'),
     path('delete_friend/<int:pk>',views.delete_friend, name='delete_friend'),
+	path("regulamin/", views.regulamin, name="regulamin"),
     
 	# <--
 ]
