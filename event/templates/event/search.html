@@ -2,13 +2,13 @@
 {% block content %}
 <div>
     <form>
-    <select id="choice_select" name="wybor" class="SelectSearch">
+    <select id="choice_select" name="wybor">
         <option value="event">Wydarzenia</option>
         <option value="place">Miejsca</option>
         <option value="person">Użytkownicy</option>
     </select>
-        <input class="wyszukiwanie" name="search_phrase" type="text" placeholder="Szukaj ...">
-        <button class="szukajBtn" name="submit" type="submit" id="button_submit">Szukaj</button>
+        <input name="search_phrase" type="text" placeholder="Szukaj ...">
+        <button name="submit" type="submit" id="button_submit">Szukaj</button>
     </form>
 
     {% if events != None%}
@@ -21,9 +21,9 @@
 </div>
 </div>
     {% if request.user.is_authenticated and event.organizator.username == request.user.username %}
-    
+
     {%endif%}
-    
+
 {%endfor%}
     {%endif%}
 
@@ -31,9 +31,32 @@
     {% for user in users%}
     <div class="Obramowanie">
             <div class="Text">
+   <a href="{% url 'other_account_info' pk=user.pk %}">
     <h2>{{user.username}}</h2>
+    </a>
     <p>{{user.first_name}} {{user.last_name}}</p>
+
     </div>
+    {% if request.user.is_authenticated and request.user.pk != user.pk %}
+
+
+
+    {% load filter %}
+    {% if frends.pk|is_friend:user.pk %}
+    <div class="options1" >
+            <a class="btn btn-default" href="{%url 'join_friend' pk=user.pk%}">Dodaj znajomego</a>
+    </div>
+    {%endif%}
+
+
+
+
+    {%endif%}
+
+
+
+
+
     </div>
     {%endfor%}
     {%endif%}

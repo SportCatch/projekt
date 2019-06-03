@@ -19,18 +19,18 @@
     <p>Opis:</p>
     </div>
         <div class="ramka">
-        
+
         {{event.opis}}
         </div>
-   
-    <div class="stopka"> 
+
+    <div class="stopka">
     <p>Organizator wydarzenia: {{event.organizator}}</p>
     <p>Lokalizacja: {{event.miejsce}}</p>
-    </div>  
+    </div>
     </div>
     {% if request.user.is_authenticated %}
-    
-    
+
+
 	<p>
 	<a href="{% url 'take_part' event.id %}">{{takePartButtonText}}</a>
 	</p>
@@ -38,7 +38,7 @@
         {% if uczestnicy|length > 0 %}
         Uczestnicy:
         <div class="mar1">
-    
+
     {%for ucz in uczestnicy%}
     <div>
 	{% if ucz.pk != request.user.pk %}
@@ -53,13 +53,15 @@
 
 
 </div>
+  <br><a href="https://www.google.com/maps/search/?api=1&query={{event.miejsce.miasto}}+{{event.miejsce.adres}}" target="_blank" class="btn btn-default">Pokaż na mapie</a>
+
 </div>
 
     <b>Sekcja komentarzy</b>
     <div class="mar">
     {%for kom in komentarze%}
     <div class="komentarze">
-    
+
     {% if kom.autor.username == request.user.username %}
     <div class="options">
     <a href="{% url 'delete_com2' pk=event.pk comPK=kom.pk %}" class="glyphicon glyphicon-remove">&#160;</a>
@@ -73,7 +75,7 @@
 <div class="tresc">
     <p>{{kom.tresc}}</p>
 </div>
-   
+
 </div>
     {%endfor%}
 </div>
@@ -83,7 +85,7 @@
     {%else%}
 
         {% if request.user.is_authenticated %}
- 
+
     <form action="{{event.get_absolute_url}}" method="post">
         {{komentarz_form.as_p}}
         {%csrf_token%}

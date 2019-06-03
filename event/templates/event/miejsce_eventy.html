@@ -5,6 +5,8 @@
 	{% if nasze_miejsce.photo.url.value != ""%}
 		<img  height="150" src="{{nasze_miejsce.photo.url}}" alt="elo"/>
 	{% endif %}
+    <br>
+    <br><a href="https://www.google.com/maps/search/?api=1&query={{nasze_miejsce.miasto}}+{{nasze_miejsce.adres}}" target="_blank" class="btn btn-default">Pokaż na mapie</a>
 </span></center>
 
 <div class= Star>

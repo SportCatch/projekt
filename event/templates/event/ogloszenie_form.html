@@ -8,7 +8,7 @@
 	<form method="post" enctype="multipart/form-data">{%csrf_token %}
 
 		{{form.non_field_errors }}
-		<h2>Dodaj ogłoszenie</h2>
+		<center><h2>Dodaj ogłoszenie</h2></center>
 		{% render_field form.tytul class="txt" placeholder=form.tytul.name %}
 
 		{% render_field form.opis class="txt" placeholder=form.opis.name %}
@@ -20,4 +20,3 @@
 
 
 {% endblock %}
-

@@ -1,14 +1,24 @@
 {% extends "Base.html" %}
 
 {% block content %}
-<div class="informacja"> Lista Twoich znajomych:
+<div class="Friends">
+   <span class="Friends_text"><center> Lista twoich znajomych</center></span>
+    <div class="Friends_list">
     {% if user.friends.all %}
     {% for u in user.friends.all %}
-    <p><a href = "{% url 'email' nick=u %}"><button>Wyślij e-maila</button></a> <a href="{% url 'other_account_info' pk=u.user.pk %}"> {{u.user.first_name}}</a><a href="{% url 'delete_friend' pk=u.user.pk %}"> Usuń</a>
+    <div class="Friend_name">
+        <p>Imię: <a href="{% url 'other_account_info' pk=u.user.pk %}">{{u.user.first_name}}</a></p>
+        Akcje:
+        <a  href="{% url 'delete_friend' pk=u.user.pk %}"><span class="Friend_delete"> Usuń</span></a>
+        <a href = "{% url 'email' nick=u %}"><span class="Friend_send_email">Wyślij e-maila</span></a>
+    </div>
+                <hr style="width:90%;"/>
+
         {% endfor %}
     {% else %}
-    <p>brak znajomych
+    <p>brak znajomych</p>
     {% endif %}
+    </div>
 </div>
-</div>
+
 {% endblock content %}

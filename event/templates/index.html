@@ -1,77 +1,28 @@
 
 {% extends 'Base.html' %}
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
 {% block content %}
-<body>
-
-    <div class="slider1"  >
-        <div id="slider">
-
-        </div>
-
-        <span>Masz nietypowe hobby?</span>
-        <p>Podziel się tym z wszystkimi!</p>
-        <button class="btn btn-success">Zarejestruj się</button>
-
-         <div class="guzik_prawo" onclick="Zwieksz()">
-             <img  src="/static/images/strzalka_prawo.svg" />
-    </div>
-        <div class="guzik_lewo" onclick="Zmniejsz()">
-            <img src="/static/images/strzalka_lewo.png"/>
-        </div>
-    </div>
 
 
+        <slider>
+            <slide><img src = "/static/images/slajdy/slajd1.jpg"/>
+              <span>Masz nietypowe hobby?</span>
+              <p>Podziel się tym z wszystkimi!</p>
+              <a href="{%url 'register'%}">Zarejestruj się</a></slide></slide>
+            <slide><img src = "/static/images/slajdy/slajd2.jpg"/>
+              <span>Masz nietypowe hobby?</span>
+              <p>Podziel się tym z wszystkimi!</p>
+              <a href="{%url 'register'%}">Zarejestruj się</a></slide></slide>
+            <slide><img src = "/static/images/slajdy/slajd3.jpg"/>
 
-</body>
-<script src = "https://code.jquery.com/jquery-3.3.1.min.js"></script>
+              <span>Masz nietypowe hobby?</span>
+              <p>Podziel się tym z wszystkimi!</p>
+              <a href="{%url 'register'%}">Zarejestruj się</a></slide></slide>
 
-<script type = "text/javascript">
-        var numer = Math.floor(Math.random() * 5 + 1)
-        var timer1 = 0
-        var timer2 = 0
+            <slide><img src = "/static/images/slajdy/slajd4.jpg"/>
+              <p>Masz nietypowe hobby?
+              Podziel się tym z wszystkimi!</p>
+              <a href="{%url 'register'%}">Zarejestruj się</a></slide>
+        </slider>
 
-        zmienslajd()
-        function Zwieksz() {
-            console.log(numer + "");
-            numer++;
-            ustawslajd(numer);
-        }
 
-        function Zmniejsz() {
-            numer--;
-            ustawslajd(numer);
-        }
-        function ustawslajd(nrslajdu)
-        {
-            clearTimeout(timer1);
-            clearTimeout(timer2);
-            numer = nrslajdu - 1;
-            schowaj();
-            setTimeout("zmienslajd()", 1)
-        }
-
-        function schowaj()
-        {
-            $("#slider").fadeOut(1)
-        }
-
-        function zmienslajd()
-        {
-            numer++;
-            if (numer > 4)
-                numer = 1;
-            if (numer < 1)
-                numer = 4;
-            var plik = "<img src =\" /static/images/slajdy/slajd" + numer + ".jpg\" />"
-            document.getElementById("slider").innerHTML = plik;
-            $("#slider").fadeIn(1);
-
-            timer1 = setTimeout("zmienslajd()", 5000);
-            timer2 = setTimeout("schowaj()", 4999);
-        }
-</script>
 {% endblock %}

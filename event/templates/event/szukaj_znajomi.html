@@ -1,0 +1,50 @@
+{% extends "Base.html" %}
+{% block content %}
+<div>
+    <form>
+    
+        <input name="search_phrase" type="text" placeholder="Szukaj ...">
+        <button name="submit" type="submit" id="button_submit">Szukaj</button>
+    </form>
+
+  
+  
+
+    {% if users != None%}
+    {% for user in users%}
+    <div class="Obramowanie">
+            <div class="Text">
+
+
+    <a href="{% url 'other_account_info' pk=user.pk %}">
+    <h2>{{user.username}}</h2>
+    </a>
+    <p>{{user.first_name}} {{user.last_name}}</p>
+    </div>
+    {% if request.user.is_authenticated and request.user.pk != user.pk %}
+   
+
+   
+    {% load filter %}
+    {% if frends.pk|is_friend:user.pk %}
+    <div class="options1" >
+            <a class="btn btn-default" href="{%url 'join_friend' pk=user.pk%}">Dodaj znajomego</a>
+    </div>
+    {%endif%}
+    
+    
+   
+  
+    {%endif%}
+    
+
+
+
+
+    </div>
+    {%endfor%}
+    {%endif%}
+
+   
+</div>
+{%endblock%}

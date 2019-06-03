@@ -71,8 +71,11 @@
 
 
     </div>
-
-    <a href = "edit"><button class="infoBtn">Edytuj konto</button></a>
+    {%if request.user.is_authenticated%}
+        {%if request.user == user.user%}
+            <a href = "{% url 'edit' %}" ><button class="infoBtn">Edytuj konto</button></a>
+        {%endif%}
+    {%endif%}
 </div>
 </div>
 {% endblock content %}

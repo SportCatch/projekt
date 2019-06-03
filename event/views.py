@@ -193,13 +193,13 @@ def event_edit(request, pk):
 
 def adv_detail(request, pk):
     user = Profile.objects.all()
-    adv = get_object_or_404(ogloszenie, pk=pk)
+    adv = ogloszenie.objects.get(id = pk)
     if request.user.is_authenticated:
         try:
             user = Profile.objects.get(user=request.user)
         except Profile.DoesNotExist:
             user = None
-    komentarze = komentarz_do_ogloszenia.objects.all()
+    komentarze = komentarz_do_ogloszenia.objects.filter(ogloszenie = adv)
     komentarz_form = None
     czy_nowy_komentarz = False
     if request.method == 'POST':
@@ -220,14 +220,15 @@ def adv_detail(request, pk):
 
 def event_detail(request, pk):
     user = Profile.objects.all()
-    event = get_object_or_404(wydarzenie, pk=pk)
+    event = wydarzenie.objects.get(id = pk)
     if request.user.is_authenticated:
         try:
             user = Profile.objects.get(user=request.user)
         except Profile.DoesNotExist:
             user = None
     uczestnicy = event.uczestnicy.all()
-    komentarze = komentarz_do_wydarzenia.objects.filter(wydarzenie=event.id)
+    print(event)
+    komentarze = komentarz_do_wydarzenia.objects.filter(wydarzenie = event)
     komentarz_form = None
     czy_nowy_komentarz = False
     if request.method == 'POST':
@@ -277,10 +278,14 @@ def get_notifications(request):
         notification.save()
     try:
         user = Profile.objects.get(user=request.user)
+        zaproszenaa=Zaproszenia.objects.all().filter(uzytkownicyy=user)
+        zaproszenaa.order_by('data')
+    
+  
     except Profile.DoesNotExist:
         user = None
     notifications = Powiadomienie.objects.all().filter(recipient=request.user)
-    context = {'notifications': notifications, 'user': user}
+    context = {'notifications': notifications, 'user': user,'zaproszenia':zaproszenaa}
     return render(request, 'event/notifications.html', context)
 
 
@@ -609,31 +614,45 @@ def AdvList(request):
 
 
 def searching(request):
+
     users = None
     events = None
     places = None
-    user = Profile.objects.all()
-    if request.user.is_authenticated:
-        try:
-            user = Profile.objects.get(user=request.user)
-        except Profile.DoesNotExist:
-            user = None
+    friends = None
     if request.method == 'GET':
-        search_phrase = request.GET.get("search_phrase", None)
-        choice = request.GET.get("wybor", None)
+        search_phrase = request.GET.get("search_phrase",None)
+        choice = request.GET.get("wybor",None)
         if choice == 'event':
             events = wydarzenie.objects.filter(nazwa__icontains=search_phrase)
-            return render(request, 'event/search.html',
-                          {'events': events, 'users': users, 'places': places, 'user': user})
+            return render(request,'event/search.html',{'events':events,'users':users,'places':places})
         if choice == 'place':
             places = miejsce.objects.filter(nazwa__icontains=search_phrase)
-            return render(request, 'event/search.html',
-                          {'events': events, 'users': users, 'places': places, 'user': user})
+            return render(request, 'event/search.html', {'events': events, 'users': users, 'places': places})
         if choice == 'person':
             users = User.objects.filter(username__icontains=search_phrase)
-            return render(request, 'event/search.html',
-                          {'events': events, 'users': users, 'places': places, 'user': user})
-        return render(request, 'event/search.html', {'events': None, 'users': None, 'places': None, 'user': user})
+        if request.user.is_authenticated:
+            friends=Profile.objects.get(user=request.user)
+
+        return render(request, 'event/search.html', {'events': events, 'users': users, 'places': places,'frends':friends})
+
+
+
+def searchingz(request):
+    users=None
+    friends=None
+    if request.method == 'GET':
+        search_phrase = request.GET.get("search_phrase",None)
+        if search_phrase:
+            users = User.objects.filter(username__icontains=search_phrase)
+        else:
+            users = User.objects.all()
+        if request.user.is_authenticated:
+            friends=Profile.objects.get(user=request.user)
+
+    return render(request, 'event/szukaj_znajomi.html', {'users': users ,'frends':friends})
+
+
+
 
 def authors(request):
     return render(request,'event/authors.html',{})
@@ -649,3 +668,43 @@ def checkUser(request):
         print("Dodanie nowego użytkownika facebook'a",file=sys.stderr)
 
     return redirect('index')
+
+
+def add_frend(reqest,pk):
+    if reqest.user.is_authenticated:
+        prof=Profile.objects.get(user=reqest.user)
+        uzytk=Profile.objects.get(user=pk)
+        b=Zaproszenia.objects.all().filter(autorr=prof)
+        
+        for bylo in b:
+            if bylo.uzytkownicyy == uzytk:
+                bylo.data=datetime.now
+                bylo.save()
+                return redirect('searching')
+        
+        p=Zaproszenia()
+        p.autorr=prof
+        p.uzytkownicyy=uzytk
+        p.save()
+    return redirect('searching')
+
+
+
+
+def przyjmij_zaproszenie(request,pika,czu):
+    zapro=Zaproszenia.objects.get(pk=czu)
+    if pika==1:
+        
+        nowy_ziomek=zapro.autorr
+        profile=Profile.objects.get(user=request.user)
+        profile.friends.add(nowy_ziomek)
+        profile.save()
+        nowy_ziomek.friends.add(profile)
+        nowy_ziomek.save()
+    
+    Zaproszenia.objects.filter(pk=czu).delete()
+    return redirect('get_notifications')
+
+
+
+

@@ -19,36 +19,36 @@
 </head>
 
 <body>
-	<div class="wrapper">
-		<div class="header">
-			<div class="logo">
-				<a  href="{% url 'index' %}"><img src="/static/images/sportcatch.svg" width="80%"/></a>
-			</div>
-		</div>
 
-			{% if request.user.is_authenticated %}<p>	
-				Witaj, {{ request.user.username }}!
-				<span><img height="100" src="{{profiles.photo.url}}" /></span>
-				<a href="{% url 'logout' %}" class="btn btn-success"> Wyloguj!</a></p>
-			{% if user.photo %} <p></p>
-
-		<img  height="100" src="{{user.photo.url}}"/>
-			{% endif %}
-		{% else %}
-		
+<div class="header">
+			<a  href="{% url 'index' %}"><img height="70" src="/static/images/sportcatch.svg" /></a>
 			<div class="header2">
-			<div class="pull-right">
-				<a  href="{% url 'login'%}" class="btn btn-success ">Zaloguj się</a>
-				<span class="">lub</span>
-				<a href="{% url 'register' %}"  class="btn btn-danger ">Zarejestruj się</a>
+
+				{% if request.user.is_authenticated %}
+				<div class="ZalogowanyUzytkownik">
+
+				{% if user.photo %}
+				<img src="{{user.photo.url}}"/>
 				{% endif %}
+				<span style="vertical-align:bottom;">	Witaj, {{ request.user.username }}!</span>
+				<a href="{% url 'logout' %}" style="vertical-align:bottom;" class="btn btn-success"> Wyloguj!</a>
 			</div>
+				{% else %}
+				<div  class="niezalogowanyUzytkownik">
+				<a  href="{% url 'login'%}" class="btn btn-success ">Zaloguj się</a>
+				<span >lub</span>
+				<a  href="{% url 'register' %}"  class="btn btn-danger ">Zarejestruj się</a>
 			</div>
+				{% endif %}
+
+			</div>
+
+</div>
 
 		<div class="nav">
 			<ol>
 
-				<li><span>Ogłoszenie</span>
+				<li><span >Ogłoszenie</span>
 					<ul>
 						<li><a href="{% url 'advlist' %}">Pokaż ogłoszenia</a></li>
 						{% if request.user.is_authenticated %}
@@ -79,7 +79,7 @@
 				{% if request.user.is_authenticated%}
 				<li><a href="#">Znajomi</a>
 					<ul>
-						<li><a href="{% url 'searching' %}">Szukaj</a></li>
+						<li><a href="{% url 'searchingz' %}">Szukaj</a></li>
 						<li><a href="{% url 'my_friends' %}">Moi znajomi</a></li>
 						<li><a href="{% url 'chats' %}">Moje czaty</a></li>
 						<li><a href="{% url 'new_chat'  %}">Utwórz czat</a></li>
@@ -97,7 +97,7 @@
 				{%endif%}
 				{%endif%}
 				<li><a href="{% url 'authors' %}">Autorzy</a></li>
-				<li><a href="{%url 'searching' %}">Wyszukaj</a></li>
+				<li><a href="{% url 'searching' %}">Wyszukaj</a></li>
 			</ol>
 
 		</div>
@@ -107,15 +107,13 @@
 			{% load emoticons_tags %}
 			{% emoticons %}
 
-			<div class="slider1" onload=zmienslajd()>
-			</div>
 			{% endemoticons %}
 			{% endblock content %}
 		</div>
 
 
 		<div class="footer">Projekt SportCatch &copy; 2018/19 Politechnika Białostocka</div>
-	</div>
+
 
 	<script src="jquery-1.11.3.min.js"></script> <!-- sticky menu bar -->
 
@@ -153,7 +151,7 @@
 		if(this.checked){
     		sendbtn.disabled = false;
 			sendbtn.style = "background-color:#459b45;";
-			
+
 		} else {
 			sendbtn.style = "background-color:grey;";
     		sendbtn.disabled = true;
@@ -163,7 +161,7 @@
 			if(this.checked && checker2.checked){
     		sendbtn.disabled = false;
 			sendbtn.style = "background-color:#459b45;";
-			
+
 		} else {
 			sendbtn.style = "background-color:grey;";
     		sendbtn.disabled = true;
@@ -174,7 +172,7 @@
 			if(this.checked && checker.checked){
     		sendbtn.disabled = false;
 			sendbtn.style = "background-color:#459b45;";
-			
+
 		} else {
 			sendbtn.style = "background-color:grey;";
     		sendbtn.disabled = true;
