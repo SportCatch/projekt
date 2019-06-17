@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date_of_birth = models.DateField(blank=True, null=True)
-    photo = models.ImageField(upload_to='profile_image', blank=True)
+    photo = models.ImageField(upload_to='profile_image',  default='profile_image/avatar_default.png')
     friends=models.ManyToManyField("self",related_name="friends")
     rate=models.IntegerField(default=0)
 
