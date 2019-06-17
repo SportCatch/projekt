@@ -5,6 +5,10 @@ from django.contrib.auth.models import User
 from account.models import Profile
 import datetime
 
+class UserTest(TestCase):
+    def create_user(self):
+        user = User.objects.create_user("Pan", "poziomka07@example.com", "Poziomka")
+        print("UserTest: "+ user.username + " "+ user.email)
 
 class WydarzenieTest(TestCase):
     def create_event(self):
@@ -27,6 +31,14 @@ class WydarzenieTest(TestCase):
     def test_title(self):
         wyd = self.create_event()
         self.assertEqual(str(wyd), "WydarzenieTest")
+
+class MiejsceTest(TestCase):
+    def create_place(self):
+        user = User.objects.create_user("user", "user2@example.com","user")
+        miejsce1 = miejsce.objects.create(adres="adres", miasto="miasto", nazwa="nazwa", zaakceptowane=False,
+                                          Srednia_ocen=2)
+        print("MiejsceTest: "+miejsce1.adres+" "+ miejsce1.miasto + " " + miejsce1.nazwa)
+         
 
 
 class KomenatarzWydarzeniaTest(TestCase):
@@ -280,7 +292,6 @@ class RateUserTest(TestCase):
         rate = self.create_rate()
         self.assertEqual(rate.event.nazwa, "WydarzenieTest")
 
-
 class ViewsTest(TestCase):
     def test_homepage(self):
         response = self.client.get('/')
@@ -341,3 +352,34 @@ class ViewsTest(TestCase):
         response = self.client.get('/events/{0}'.format(event.id))
         self.assertEqual(response.status_code,200)
         self.assertQuerysetEqual(response.context['takePartButtonText'].split(" "),["'Wezmę'","'udział!'"])
+
+#Sprint 10
+class TestWyszukiwarki(TestCase):
+    def test(self):
+        response = self.client.get('/searching')
+        self.assertEqual(response.status_code, 200)
+    def szukajWydarzenie(self):
+        user = User.objects.create_user("user2", "user2@example.com", "user2")
+        Profile.objects.create(user=user, date_of_birth=datetime.datetime(1999, 3, 3))
+        event = WydarzenieTest.create_event(self)
+        self.client.login(username='user2', password='user2')
+        response = self.client.get('/searching/?wybor=event&search_phrase=a&submit=')
+        self.assertEqual(response.status_code, 200)
+        print(response.context['events'])
+        self.assertQuerysetEqual(response.context['events'], ['<wydarzenie: WydarzenieTest>'])
+    def szukajMiejsce(self):
+        user = User.objects.create_user("user2", "user2@example.com", "user2")
+        Profile.objects.create(user=user, date_of_birth=datetime.datetime(1999, 3, 3))
+        miejsce = MiejsceTest.create_place(self)
+        self.client.login(username='user2', password='user2')
+        response = self.client.get('/searching/?wybor=place&search_phrase=&submit=')
+        self.assertEqual(response.status_code, 200)
+        print(response.context['places'])
+    def szukajUzytkownik(self):
+        user = User.objects.create_user("user2", "user2@example.com", "user2")
+        Profile.objects.create(user=user, date_of_birth=datetime.datetime(1999, 3, 3))
+        user2 = UserTest.create_user(self)
+        self.client.login(username='user2', password='user2')
+        response = self.client.get('/searching/?wybor=person&search_phrase=&submit=')
+        self.assertEqual(response.status_code, 200)
+        print(response.context['frends'])

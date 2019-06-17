@@ -4,7 +4,7 @@
 
 <center><h2>Miejsca</h2></center>
 <div style="background-color:#383a3d;padding:10px; border-radius: 9px">
-{% for miejsce in miejsca %}
+{% for miejsce in placem %}
     {% if request.user.username == 'admin'%}
     <a style="color:white;text-decoration:none;" href="{% url 'Edite_place' pk=miejsce.pk %}" class="glyphicon glyphicon-pencil"></a>
     <a style="color:white;text-decoration:none;" href="{% url 'Delete_place' pk=miejsce.pk %}" class="glyphicon glyphicon-remove"></a>
@@ -29,5 +29,24 @@
     <hr/>
 {%endfor%}
    </div>
-    
+    <div class="wydarzenia">
+    <div class>
+         {{ placem.number }} / {{ placem.paginator.num_pages }}
+    </div>
+
+   {% if placem.has_previous %}
+        <div class="stronicowanie">
+            <a  class="btn btn-danger " href="?page=1">&laquo;</a>
+            <a  class="btn btn-success " href="?page={{ placem.previous_page_number }}">Poprzednia</a>
+        </div>
+{% endif %}
+  
+  {% if placem.has_next %}
+          <div class="stronicowanie">
+            <a  class="btn btn-success " href="?page={{ placem.next_page_number }}">Następna</a>
+            <a  class="btn btn-danger " href="?page={{ placem.paginator.num_pages }}"> &raquo;</a>
+         </div>
+ 
+  {% endif %}
+</div>
 {% endblock %}

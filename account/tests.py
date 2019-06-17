@@ -54,3 +54,4 @@ class FormsTests(TestCase):
         data = {'username': 'username', 'password': ''}
         form = LoginForm(data=data)
         self.assertFalse(form.is_valid())
+

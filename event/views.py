@@ -1,23 +1,19 @@
 from datetime import datetime
-from account.models import Profile
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.template import Library
-from .models import *
 from .forms import *
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import CreateView, UpdateView
 from django.shortcuts import redirect
 from datetime import date
+from django.core.paginator import Paginator
+
 register = Library()
 import sys
 info = ["Twoje ogłoszenie zostało utworzone.",
         "Twoje wydarzenie zostało utworzone.",
         "Czeka na akceptację administratora."]
-
-
 
 class OgloszenieCreateView(CreateView):
     profiles = Profile.objects.all()
@@ -61,7 +57,7 @@ class MiejsceCreateView(CreateView):
 
 class WydarzenieUpdateView(UpdateView):
     model = wydarzenie
-    fields = ('nazwa', 'opis', 'miejsce', 'data_rozpoczecia', 'uczestnicy')
+    fields = ('nazwa', 'opis', 'miejsce', 'data_rozpoczecia', 'photo')
     template_name = 'event/edit_event.html'
     # pk_url_kwarg = 'pk'
     context_object_name = 'wydarzenie'
@@ -72,6 +68,18 @@ class WydarzenieUpdateView(UpdateView):
         wydarzenie.save()
         return redirect('event_detail', pk=wydarzenie.pk)
 
+class OgloszenieUpdate(UpdateView):
+    model = ogloszenie
+    fields = ('tytul','opis','zdjecie')
+    template_name = 'event/adv_edit.html'
+    context_object_name = 'ogloszenie'
+
+    def form_valid(self, form):
+        ogloszenie = form.save(commit = False)
+        ogloszenie.autor = self.request.user
+        ogloszenie.is_archive = False
+        ogloszenie.save()
+        return redirect('adv_detail',pk=ogloszenie.pk)
 
 @register.filter
 def is_false(arg):
@@ -81,29 +89,64 @@ def is_false(arg):
 
 
 def index(request):
+    users = None
+    events = None
+    places = None
+    friends = None
     profiles = Profile.objects.all()
     user = Profile.objects.all()
     if request.user.is_authenticated:
-        try:
-            user = Profile.objects.get(user=request.user)
-        except Profile.DoesNotExist:
-            user = None
-        request.session['sprawdz'] = Sprawdz(request)
-        request.session['new_notifications'] = get_amount_of_unviewed_notifications(request)
+            try:
+                user = Profile.objects.get(user=request.user)
+            except Profile.DoesNotExist:
+                user = None
+            request.session['sprawdz'] = Sprawdz(request)
+            request.session['new_notifications'] = get_amount_of_unviewed_notifications(request)
+    if request.method == 'GET':
+        search_phrase = request.GET.get("search_phrase",None)
+        choice = request.GET.get("wybor",None)
+        if choice == 'event':
+            events = wydarzenie.objects.filter(nazwa__icontains=search_phrase)
+            return render(request,'index.html',{'events':events,'users':users,'places':places,'profiles': profiles, 'user': user,'indexsa':1})
+        if choice == 'place':
+            places = miejsce.objects.filter(nazwa__icontains=search_phrase)
+            return render(request, 'index.html', {'events': events, 'users': users, 'places': places,'profiles': profiles, 'user': user,'indexsa':1})
+        if choice == 'person':
+            users = User.objects.filter(username__icontains=search_phrase)
+        if request.user.is_authenticated:
+            friends=Profile.objects.get(user=request.user)
+        return render(request, 'index.html', {'events': events, 'users': users, 'places': places,'frends':friends,'profiles': profiles, 'user': user,'indexsa':1})
 
-    return render(request, 'index.html', {'profiles': profiles, 'user': user})
+
+        return render(request, 'index.html', {'profiles': profiles, 'user': user,'indexsa':1})
 
 
 def events_list(request):
     user = Profile.objects.all()
     profiles = Profile.objects.all()
-    events = wydarzenie.objects.order_by('data_rozpoczecia')
+    today = datetime.now().date()
+    print(str(today))
+    all_events = wydarzenie.objects.order_by('data_rozpoczecia')
+    events = []
+    for e in all_events:
+        if(e.data_rozpoczecia >= today):
+            events.append(e)
     if request.user.is_authenticated:
         try:
             user = Profile.objects.get(user=request.user)
         except Profile.DoesNotExist:
             user = None
-    return render(request, 'event/events_list.html', {'events': events, 'profiles': profiles, 'user': user})
+    lista = events
+    paginator = Paginator(lista, 5)
+
+    page = request.GET.get('page')
+    wydarz = paginator.get_page(page)
+    return render(request, 'event/events_list.html', {'events': events, 'profiles': profiles, 'user': user, 'wydarz':wydarz})
+
+
+
+
+
 
 
 def Sprawdz(request):
@@ -149,23 +192,24 @@ def uczestnik_delete(regest, pk, ucz):
 
 
 def adv_edit(request, pk):
-    user = Profile.objects.all()
+    profil = Profile.objects.all()
+    user2 = Profile.objects.get(user = request.user)
     adv = get_object_or_404(ogloszenie, pk=pk)
     if request.user.is_authenticated:
         try:
-            user = Profile.objects.get(user=request.user)
+            profil = Profile.objects.get(user=request.user)
         except Profile.DoesNotExist:
-            user = None
+            profil = None
     if request.method == "POST":
         form = ogloszenieForm(instance=adv, data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('advlist', {'user': user})
+            return redirect('advlist', {'profile': profil, 'user':user2})
+        
     else:
         form = ogloszenieForm(instance=adv)
-    context = {'uform': form, 'user': user}
+    context = {'uform': form, 'profile': profil,'user':user2}
     return render(request, 'event/adv_edit.html', context)
-
 
 def event_edit(request, pk):
     user = Profile.objects.all()
@@ -194,6 +238,8 @@ def event_edit(request, pk):
 def adv_detail(request, pk):
     user = Profile.objects.all()
     adv = ogloszenie.objects.get(id = pk)
+    liczba_wyswietlen = adv.liczba_wyswietlen
+    ogloszenie.objects.filter(pk = pk).update(liczba_wyswietlen = liczba_wyswietlen+1)
     if request.user.is_authenticated:
         try:
             user = Profile.objects.get(user=request.user)
@@ -221,6 +267,8 @@ def adv_detail(request, pk):
 def event_detail(request, pk):
     user = Profile.objects.all()
     event = wydarzenie.objects.get(id = pk)
+    liczba_wyswietlen = event.liczba_wyswietlen
+    wydarzenie.objects.filter(id = pk).update(liczba_wyswietlen = liczba_wyswietlen+1)
     if request.user.is_authenticated:
         try:
             user = Profile.objects.get(user=request.user)
@@ -251,7 +299,8 @@ def event_detail(request, pk):
                                                        'event': event, 'uczestnicy': uczestnicy,
                                                        'komentarze': komentarze,
                                                        'komentarz_form': komentarz_form,
-                                                       'takePartButtonText': takePartButtonText, 'user': user})
+                                                       'takePartButtonText': takePartButtonText, 'user': user,
+                                                       'today':datetime.now().date()})
 
 
 def take_part(request, event_id):
@@ -280,8 +329,8 @@ def get_notifications(request):
         user = Profile.objects.get(user=request.user)
         zaproszenaa=Zaproszenia.objects.all().filter(uzytkownicyy=user)
         zaproszenaa.order_by('data')
-    
-  
+
+
     except Profile.DoesNotExist:
         user = None
     notifications = Powiadomienie.objects.all().filter(recipient=request.user)
@@ -302,12 +351,12 @@ def get_self_events(request):
         except Profile.DoesNotExist:
             user = None
         id = request.user
-        Wlasne = wydarzenie.objects.filter(organizator=id)
+        Wlasne = wydarzenie.objects.filter(organizator=id).order_by('-data_rozpoczecia')
         Udzial = wydarzenie.objects.filter(uczestnicy=id)
+        today = datetime.now().date()
 
 
-
-        context = {'Wlasne': Wlasne, 'Udzial': Udzial, 'user': user,'userr':id}
+        context = {'Wlasne': Wlasne, 'Udzial': Udzial, 'user': user,'userr':id,'today':today}
         return render(request, 'event/moje_wydarzenia.html', context)
     return redirect('login')
 
@@ -407,7 +456,11 @@ def ListaMiejsc(request):
     miejsca_lista = miejsce.objects.all()
     profiles = Profile.objects.all()
 
-    return render(request, 'event/place_list.html', {'miejsca': miejsca_lista, 'profiles': profiles, 'user': user})
+    paginator = Paginator(miejsca_lista, 5)
+    page = request.GET.get('page')
+    placem = paginator.get_page(page)
+
+    return render(request, 'event/place_list.html', {'miejsca': miejsca_lista, 'profiles': profiles, 'user': user, 'placem':placem})
 
 
 def Ocenki(request, ocena, pkmiast):
@@ -459,7 +512,8 @@ def Ocenki_w(request, ocena, pkwydarzeni):
 def Miejsce_wydarzenia(request, pk):
     user = Profile.objects.all()
     nasze_miejsce = miejsce.objects.get(pk=pk)
-    events = wydarzenie.objects.all().filter(miejsce=nasze_miejsce)
+    events = wydarzenie.objects.all().filter(miejsce=nasze_miejsce).order_by('-data_rozpoczecia')
+    nadchodzace = len(events.filter(data_rozpoczecia__gte = datetime.now().date()))
     czy_oceniny = False
     if request.user.is_authenticated:
         try:
@@ -493,7 +547,9 @@ def Miejsce_wydarzenia(request, pk):
                                                          'komentarz_form': komentarz_form,
                                                          'czy_nowy': czy_nowy,
                                                          'Ocenione_m': czy_oceniny,
-                                                         'user': user
+                                                         'user': user,
+                                                         'today':datetime.now().date(),
+                                                         'ilosc_nadchodzacych':nadchodzace
                                                          })
 
 
@@ -609,8 +665,19 @@ def AdvList(request):
             user = Profile.objects.get(user=request.user)
         except Profile.DoesNotExist:
             user = None
-    lista = ogloszenie.objects.all()
-    return render(request, 'event/adv_list.html', {'lista': lista, 'user': user})
+    all_adv = ogloszenie.objects.order_by('-data')
+    lista = []
+    for a in all_adv:
+        if(a.is_archive == False):
+            lista.append(a)
+    paginator = Paginator(lista, 5)
+
+    page = request.GET.get('page')
+    oglosz = paginator.get_page(page)
+    return render(request, 'event/adv_list.html', {'lista': lista, 'user': user, 'oglosz': oglosz})
+
+
+
 
 
 def searching(request):
@@ -624,16 +691,17 @@ def searching(request):
         choice = request.GET.get("wybor",None)
         if choice == 'event':
             events = wydarzenie.objects.filter(nazwa__icontains=search_phrase)
-            return render(request,'event/search.html',{'events':events,'users':users,'places':places})
+            return render(request,'index.html',{'events':events,'users':users,'places':places,'indexsa':1})
         if choice == 'place':
             places = miejsce.objects.filter(nazwa__icontains=search_phrase)
-            return render(request, 'event/search.html', {'events': events, 'users': users, 'places': places})
+            return render(request, 'index.html', {'events': events, 'users': users, 'places': places,'indexsa':1})
         if choice == 'person':
             users = User.objects.filter(username__icontains=search_phrase)
         if request.user.is_authenticated:
             friends=Profile.objects.get(user=request.user)
+        return render(request, 'index.html', {'events': events, 'users': users, 'places': places,'frends':friends,'indexsa':1})
+        return render(request, 'index.html', {'events': events, 'users': users, 'places': places,'frends':friends,'indexsa':1})
 
-        return render(request, 'event/search.html', {'events': events, 'users': users, 'places': places,'frends':friends})
 
 
 
@@ -649,7 +717,7 @@ def searchingz(request):
         if request.user.is_authenticated:
             friends=Profile.objects.get(user=request.user)
 
-    return render(request, 'event/szukaj_znajomi.html', {'users': users ,'frends':friends})
+    return render(request, 'event/szukaj_znajomi.html', {'users': users ,'frends':friends,'indexsa':1})
 
 
 
@@ -675,13 +743,13 @@ def add_frend(reqest,pk):
         prof=Profile.objects.get(user=reqest.user)
         uzytk=Profile.objects.get(user=pk)
         b=Zaproszenia.objects.all().filter(autorr=prof)
-        
+
         for bylo in b:
             if bylo.uzytkownicyy == uzytk:
                 bylo.data=datetime.now
                 bylo.save()
                 return redirect('searching')
-        
+
         p=Zaproszenia()
         p.autorr=prof
         p.uzytkownicyy=uzytk
@@ -694,17 +762,65 @@ def add_frend(reqest,pk):
 def przyjmij_zaproszenie(request,pika,czu):
     zapro=Zaproszenia.objects.get(pk=czu)
     if pika==1:
-        
+
         nowy_ziomek=zapro.autorr
         profile=Profile.objects.get(user=request.user)
         profile.friends.add(nowy_ziomek)
         profile.save()
         nowy_ziomek.friends.add(profile)
         nowy_ziomek.save()
-    
+
     Zaproszenia.objects.filter(pk=czu).delete()
     return redirect('get_notifications')
 
 
+def archive_events(request):
+    user = Profile.objects.all()
+    today = datetime.now().date()
+    all_events = wydarzenie.objects.order_by('data_rozpoczecia')
+    events = []
+    for e in all_events:
+        if (e.data_rozpoczecia < today):
+            events.append(e)
+    if request.user.is_authenticated:
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
+
+    paginator = Paginator(events, 5)
+
+    page = request.GET.get('page')
+    eventsearch = paginator.get_page(page)
+
+    return render(request, 'event/archive_events.html', {'events': events, 'user': user, 'eventsearch':eventsearch})
 
 
+def archive_advlist(request):
+    user = Profile.objects.all()
+    if request.user.is_authenticated:
+        try:
+            user = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            user = None
+    all_adv = ogloszenie.objects.order_by('-data')
+    lista=[]
+    for a in all_adv:
+        if(a.is_archive == True):
+            lista.append(a)
+
+    paginator = Paginator(lista, 5)
+
+    page = request.GET.get('page')
+    listapag = paginator.get_page(page)
+    return render(request, 'event/archive_adv_list.html', {'lista': lista, 'user': user,'listapag':listapag})
+
+
+def add_adv_to_archive(self,pk):
+    ogloszenie.objects.filter(pk=pk).update(is_archive=True)
+    return redirect('advlist')
+
+
+def remove_from_archive(self,pk):
+    ogloszenie.objects.filter(pk=pk).update(is_archive=False,data = datetime.now())
+    return redirect('archive_advlist')

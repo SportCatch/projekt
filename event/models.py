@@ -47,6 +47,7 @@ class wydarzenie(models.Model):
     uczestnicy=models.ManyToManyField(User,related_name="uczestnicy")
     Srednia_ocen=models.IntegerField( default=0)
     photo = models.ImageField(upload_to="wydarzenia/", blank=True, default='miejsca/Default.jpg')
+    liczba_wyswietlen = models.IntegerField( default=0)
     def __str__(self):
         return self.nazwa
 
@@ -72,6 +73,8 @@ class ogloszenie(models.Model):
     data=models.DateTimeField(auto_now=True)
     zdjecie = models.ImageField(upload_to='ogloszenie/', blank=True, default='ogloszenie/Default.jpg')
     opis=models.TextField()
+    is_archive = models.BooleanField(default=False)
+    liczba_wyswietlen = models.IntegerField(default=0)
     def __str__(self):
         return self.tytul
 

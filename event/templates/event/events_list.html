@@ -10,7 +10,7 @@
         <a class="btn btn-default" href="{%url 'new_event'%}"><span class="glyphicon glyphicon-plus"></span></a>
         {%endif%}
         </div>
-{% for event in events %}
+{% for event in wydarz %}
 <div class="Obramowanie">
         <div class="Text">
     <h2><a href="{%url 'event_detail' pk=event.pk%}">{{event.nazwa}}</a></h2>
@@ -27,4 +27,24 @@
 {%endfor%}
         </div>
    </div>
+   <div class="wydarzenia">
+    <div class>
+         {{ wydarz.number }} / {{ wydarz.paginator.num_pages }}
+    </div>
+
+   {% if wydarz.has_previous %}
+        <div class="stronicowanie">
+            <a  class="btn btn-danger " href="?page=1">&laquo;</a>
+            <a  class="btn btn-success " href="?page={{ wydarz.previous_page_number }}">Poprzednia</a>
+        </div>
+{% endif %}
+  
+  {% if wydarz.has_next %}
+          <div class="stronicowanie">
+            <a  class="btn btn-success " href="?page={{ wydarz.next_page_number }}">Następna</a>
+            <a  class="btn btn-danger " href="?page={{ wydarz.paginator.num_pages }}"> &raquo;</a>
+         </div>
+ 
+  {% endif %}
+</div>
 {% endblock %}

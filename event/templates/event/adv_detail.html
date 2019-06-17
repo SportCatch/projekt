@@ -22,28 +22,31 @@
 
 
 <div class="mar">
-
-
-
-
-    {%for kom in komentarze%}
-    <div class="komentarze">
-        {% if kom.autor.username == request.user.username %}
-        <div class="options">
+ {%for kom in komentarze%}
+    {% if kom.autor.username == request.user.username %}
+   <div class="options3">
             <a href="{% url 'delete_com3' pk=adv.pk comPK=kom.pk %}" class="glyphicon glyphicon-remove">&#160;</a>
             <a href="{% url 'EditCommentAdv'  pk=kom.pk pkadv=adv.pk %}" class="glyphicon glyphicon-pencil"> </a>
-        </div>
-        {%endif%}
+    </div>     
 
-        <div class="Text3">
-            <p>{{kom.autor}}</p>
-            <p>{{kom.data}}</p>
-        </div>
-        <div class="tresc">
-            <p>{{kom.tresc}}</p>
-        </div>
+    {%endif%}
+   
+      
+<div class="komentarze">
 
+   <div class="options">
+    <p> Dodano: {{kom.data}}</p>
     </div>
+   
+    <div class="Text4">
+    <p>{{kom.autor}}</p>
+        </div>
+        <br>
+<div class="tresc">
+    <p>{{kom.tresc}}</p>
+</div>
+
+</div>
     {%endfor%}
 </div>
 
@@ -60,5 +63,5 @@
 </form>
 {%endif%}
 {%endif%}
-
+ <p style="font-size:15px">Liczba odsłon: {{adv.liczba_wyswietlen}}</p>
 {%endblock%}

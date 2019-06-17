@@ -3,7 +3,8 @@
 {% block content %}
 
 
-        <slider>
+<div class="slajder">
+<slider>
             <slide><img src = "/static/images/slajdy/slajd1.jpg"/>
               <span>Masz nietypowe hobby?</span>
               <p>Podziel się tym z wszystkimi!</p>
@@ -23,6 +24,74 @@
               Podziel się tym z wszystkimi!</p>
               <a href="{%url 'register'%}">Zarejestruj się</a></slide>
         </slider>
+</div>
 
+<div>
+    {% if events != None%}
+{% for event in events %}
+    <div class="Obramowanie">
+            <div class="Text">
+    <h2><a href="{%url 'event_detail' pk=event.pk%}">{{event.nazwa}}</a></h2>
+    <p>Data: {{event.data_rozpoczecia}}</p>
+    <p>Lokalizacja: {{event.miejsce}}</p>
+</div>
+</div>
+    {% if request.user.is_authenticated and event.organizator.username == request.user.username %}
+
+    {%endif%}
+
+{%endfor%}
+    {%endif%}
+
+    {% if users != None%}
+    {% for user in users%}
+    <div class="Obramowanie">
+            <div class="Text">
+   <a href="{% url 'other_account_info' pk=user.pk %}">
+    <h2>{{user.username}}</h2>
+    </a>
+    <p>{{user.first_name}} {{user.last_name}}</p>
+
+    </div>
+    {% if request.user.is_authenticated and request.user.pk != user.pk %}
+
+
+
+    {% load filter %}
+    {% if frends.pk|is_friend:user.pk %}
+    <div class="options1" >
+            <a class="btn btn-default" href="{%url 'join_friend' pk=user.pk%}">Dodaj znajomego</a>
+    </div>
+    {%endif%}
+
+
+
+
+    {%endif%}
+
+
+
+
+
+    </div>
+    {%endfor%}
+    {%endif%}
+
+    {% if places != None %}
+    {%for place in places%}
+    <div class="Obramowanie">
+            <div class="Text">
+        <h1><a
+                              href="{% url 'miejsce_wydarzenia' pk=place.pk %}#">{{place.nazwa}}</a>
+    </h1>
+    <p>{{place.miasto}}</p>
+    <p>{{place.adres}}</p>
+</div>
+</div>
+    {%endfor%}
+    {%endif%}
+</div>
+    
+</div>
 
 {% endblock %}

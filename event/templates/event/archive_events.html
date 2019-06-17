@@ -1,0 +1,51 @@
+{% extends 'Base.html' %}
+{% block title %}Nasza zespołowa aplikacja- SportCatch{% endblock %}
+{% block content %}
+<div class="wydarzenia">
+
+    <div class="Elementy_wydarzen">
+        <h2>Archiwum wydarzeń</h2>
+        <!--<div class="options1">-->
+            <!--{% if request.user.is_authenticated%}-->
+            <!--<a class="btn btn-default" href="{%url 'new_event'%}"><span class="glyphicon glyphicon-plus"></span></a>-->
+            <!--{%endif%}-->
+        <!--</div>-->
+        {% for event in eventsearch %}
+        <div class="Obramowanie">
+            <div class="Text">
+                <h2><a href="{%url 'event_detail' pk=event.pk%}">{{event.nazwa}}</a></h2>
+                <p>Data: {{event.data_rozpoczecia}}</p>
+                <p>Lokalizacja: {{event.miejsce}}</p>
+            </div>
+            <div class="options">
+                {% if request.user.is_authenticated and event.organizator.username == request.user.username %}
+                <a class="btn btn-default" href=""><i class="glyphicon glyphicon-trash"></i></a>
+                <a class="btn btn-default" href="{%url 'edit_event' pk=event.pk%}"><i
+                        class="glyphicon glyphicon-pencil"></i></a>
+                {%endif%}
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+</div>
+<div class="wydarzenia">
+    <div class>
+         {{ eventsearch.number }} / {{ eventsearch.paginator.num_pages }}
+    </div>
+
+   {% if eventsearch.has_previous %}
+        <div class="stronicowanie">
+            <a  class="btn btn-danger " href="?page=1">&laquo;</a>
+            <a  class="btn btn-success " href="?page={{ eventsearch.previous_page_number }}">Poprzednia</a>
+        </div>
+{% endif %}
+  
+  {% if eventsearch.has_next %}
+          <div class="stronicowanie">
+            <a  class="btn btn-success " href="?page={{ eventsearch.next_page_number }}">Następna</a>
+            <a  class="btn btn-danger " href="?page={{ eventsearch.paginator.num_pages }}"> &raquo;</a>
+         </div>
+ 
+  {% endif %}
+</div>
+{% endblock %}

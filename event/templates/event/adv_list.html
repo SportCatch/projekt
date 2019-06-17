@@ -6,7 +6,9 @@
 <div class="Elementy_wydarzen">
 
 
-{% for adv in lista %}
+
+
+{% for adv in oglosz %}
 <div class="Obramowanie">
     <div class="Text">
     <h2><a href="{%url 'adv_detail' pk=adv.pk%}">{{adv.tytul}}</a></h2>
@@ -19,6 +21,8 @@
         <div class="options" >
     <a class="btn btn-default" href="{% url 'adv_delete' pk=adv.pk %}"><i class="glyphicon glyphicon-trash"></i></a>
     <a class="btn btn-default" href="{%url 'adv_edit' pk=adv.pk%}"><i class="glyphicon glyphicon-pencil"></i></a>
+       <br/>
+            <a href="{% url 'add_adv_to_archive' pk=adv.pk %}" style="color:white">Dodaj do archiwum</a>
         </div>
     {%endif%}
    
@@ -27,5 +31,25 @@
 {%endfor%}
 
 </div>
+</div>
+<div class="wydarzenia">
+    <div class>
+         {{ oglosz.number }} / {{ oglosz.paginator.num_pages }}
+    </div>
+
+   {% if oglosz.has_previous %}
+        <div class="stronicowanie">
+            <a  class="btn btn-danger " href="?page=1">&laquo;</a>
+            <a  class="btn btn-success " href="?page={{ oglosz.previous_page_number }}">Poprzednia</a>
+        </div>
+{% endif %}
+  
+  {% if oglosz.has_next %}
+          <div class="stronicowanie">
+            <a  class="btn btn-success " href="?page={{ oglosz.next_page_number }}">Następna</a>
+            <a  class="btn btn-danger " href="?page={{ oglosz.paginator.num_pages }}"> &raquo;</a>
+         </div>
+ 
+  {% endif %}
 </div>
 {% endblock %}

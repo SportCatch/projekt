@@ -8,11 +8,18 @@
 		<div class="Elementy_wydarzen">
 
 		{% for event in Wlasne %}
+			{%if event.data_rozpoczecia < today %}
+		<div class="Obramowanie"   style="background-color:#252627;">
+			{%else%}
 		<div class="Obramowanie">
+			{%endif%}
 		<div class="Text">
 
-
+			{%if event.data_rozpoczecia < today %}
+			<h2><a href="{%url 'event_detail' pk=event.pk%}">Archiwalne: {{event.nazwa}}</a></h2>
+			{%else%}
 			<h2><a href="{%url 'event_detail' pk=event.pk%}">{{event.nazwa}}</a></h2>
+			{%endif%}
 			<p>Data: {{event.data_rozpoczecia}}</p>
 			<p>Lokalizacja: {{event.miejsce}}</p>
 			</div>

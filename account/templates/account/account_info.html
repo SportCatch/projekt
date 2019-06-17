@@ -2,70 +2,68 @@
 
 {% block content %}
 <div class="infoView">
-    {% if user.user.photo %}
-    <span><img  height="150" src="{{user.photo.url}}"/></span>
-    {% endif %}
+   
     <div class="informacja"></div>
-    <div class="informacja"> Imie: {{user.user.first_name}} </div>
-    <div class="informacja"> Nazwisko: {{user.user.last_name}} </div>
-    <div class="informacja"> Nick: {{user.user.username}} </div>
-    <div class="informacja"> Email: {{user.user.email}} </div>
+    <div class="informacja"> Imie: {{profile.user.first_name}} </div>
+    <div class="informacja"> Nazwisko: {{profile.user.last_name}} </div>
+    <div class="informacja"> Nick: {{profile.user.username}} </div>
+    <div class="informacja"> Email: {{profile.user.email}} </div>
     <div class="informacja">Data urodzenia:
-        {% if user.date_of_birth %}
-         {{user.date_of_birth}} </div>
+        {% if profile.date_of_birth %}
+         {{profile.date_of_birth}} </div>
         {% else %}
         brak danych
         {% endif %}
     <div class="informacja">Liczba przyjaciół:
-        {% if user.friends.all %}
-        {{user.friends.all|length}}
+        {% if profile.friends.all %}
+        {{profile.friends.all|length}}
         {% else %}
         0
         {% endif %}
     </div>
-        {% if user.rate <= 0 %}
+        {% if profile.rate <= 0 %}
             <img src="/static/images/bronze1.png" width="30%" height="30%"/>
         {% endif %}
-        {% if user.rate > 10 and user.rate <= 20 %}
+        {% if profile.rate > 10 and profile.rate <= 20 %}
             <img src="/static/images/bronze2.png" width="30%" height="30%" />
         {% endif %}
-        {% if user.rate > 20 and user.rate <= 35 %}
+        {% if profile.rate > 20 and profile.rate <= 35 %}
             <img src="/static/images/bronze3.png" width="30%" height="30%" />
         {% endif %}
-        {% if user.rate > 35 and user.rate <= 50 %}
+        {% if profile.rate > 35 and profile.rate <= 50 %}
             <img src="/static/images/bronze4.png"  width="30%" height="30%"/>
         {% endif %}
-        {% if user.rate > 50 and user.rate <= 70 %}
+        {% if profile.rate > 50 and profile.rate <= 70 %}
             <img src="/static/images/bronze5.png" width="30%" height="30%"/>
         {% endif %}
-        {% if user.rate > 70 and user.rate <= 90 %}
+        {% if profile.rate > 70 and profile.rate <= 90 %}
             <img src="/static/images/silver1.png"  width="30%" height="30%"/>
         {% endif %}
-        {% if user.rate > 90 and user.rate <= 110 %}
+        {% if profile.rate > 90 and profile.rate <= 110 %}
             <img src="/static/images/silver2.png"  width="30%" height="30%"/>
         {% endif %}
-        {% if user.rate > 110 and user.rate <= 135 %}
+        {% if profile.rate > 110 and profile.rate <= 135 %}
             <img src="/static/images/silver3.png"  width="30%" height="30%"/>
         {% endif %}
-        {% if user.rate > 135 and user.rate <= 160 %}
+        {% if profile.rate > 135 and profile.rate <= 160 %}
             <img src="/static/images/silver4.png"  width="30%" height="30%"/>
         {% endif %}
-        {% if user.rate > 160 and user.rate <= 190 %}
+        {% if profile.rate > 160 and profile.rate <= 190 %}
             <img src="/static/images/silver5.png" width="30%" height="30%" />
         {% endif %}
-        {% if user.rate > 190 and user.rate <= 220 %}
+        {% if profile.rate > 190 and profile.rate <= 220 %}
             <img src="/static/images/gold1.png"  width="30%" height="30%"/>
         {% endif %}
-        {% if user.rate > 220 and user.rate <= 250 %}
+        {% if profile.rate > 220 and profile.rate <= 250 %}
             <img src="/static/images/gold2.png"  width="30%" height="30%"/>
         {% endif %}
-        {% if user.rate > 250 and user.rate <= 290 %}
+        {% if profile.rate > 250 and profile.rate <= 290 %}
             <img src="/static/images/gold3.png"  width="30%" height="30%"/>
         {% endif %}
-        {% if user.rate > 290 and user.rate <= 330 %}
+        {% if profil.rate > 290 and profile.rate <= 330 %}
             <img src="/static/images/gold4.png" width="30%" height="30%" />
         {% endif %}
-        {% if user.rate > 330 %}
+        {% if profil.rate > 330 %}
             <img src="/static/images/gold5.png"  width="30%" height="30%"/>
         {% endif %}
 

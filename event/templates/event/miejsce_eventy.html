@@ -6,6 +6,8 @@
 		<img  height="150" src="{{nasze_miejsce.photo.url}}" alt="elo"/>
 	{% endif %}
     <br>
+    <p>Liczba wydarzeń w tym miejscu: {{ilosc}}</p>
+    <p>Liczba nadchodzących wydarzeń w tym miejscu: {{ilosc_nadchodzacych}}</p>
     <br><a href="https://www.google.com/maps/search/?api=1&query={{nasze_miejsce.miasto}}+{{nasze_miejsce.adres}}" target="_blank" class="btn btn-default">Pokaż na mapie</a>
 </span></center>
 
@@ -38,9 +40,17 @@
 <div class="Elementy_wydarzen">
         
     {% for event in events %}
+    {% if event.data_rozpoczecia >= today%}
     <div class="Obramowanie2">
+        {%else%}
+         <div style =background-color:#252627;" class="Obramowanie2">
+        {%endif%}
         <div class="Text2">
+            {% if event.data_rozpoczecia >= today%}
         <h2><a style="color:#67C838;text-decoration:none;" href="{% url 'event_detail' pk=event.pk %}">{{event.nazwa}}</a></h2>
+            {%else%}
+               <h2><a style="color:#67C838;text-decoration:none;" href="{% url 'event_detail' pk=event.pk %}">Archiwalne: {{event.nazwa}}</a></h2>
+            {%endif%}
         <div class="Szara">
     <p>Organizator: {{event.organizator}}</p>
     <p>Data rozpoczęcia: {{event.data_rozpoczecia}}</p>
@@ -58,29 +68,29 @@
 
     
     {% for komentarz in komentarze %}
-  
-    <div class="komentarze">
-
-{% if komentarz.autor.username == request.user.username %}
-<div class="options">
+    {% if komentarz.autor.username == request.user.username %}
+<div class="options3">
 <a href="{% url 'delete_com' pk=nasze_miejsce.pk comPK=komentarz.pk %}" class="glyphicon glyphicon-remove">&#160;</a>
 <a href="{%url 'EditComment' pk=komentarz.pk miejscePK=nasze_miejsce.pk%}" class="glyphicon glyphicon-pencil"> </a>
 </div>
 {%endif%}
-
-
-<div class="Text2">
-<p> Autor:  {{komentarz.autor}}</p>
-<p>Dodano:  {{komentarz.data| timesince}} temu</p>
-
-</div>
-<div class= tresc>
-        <p> {{komentarz.tresc}}</p>
-</div>
-
-
   
+ <div class="komentarze">
+     
+    {% if kom.autor.username == request.user.username %}
+    <div class="options">
+    <p> Dodano: {{komentarz.data}}</p>
     </div>
+    {%endif%}
+    <div class="Text4">
+    <p>{{komentarz.autor}}</p>
+        </div>
+        <br>
+<div class="tresc">
+    <p>{{komentarz.tresc}}</p>
+</div>
+
+</div>
 
     {%endfor%}
 </div>

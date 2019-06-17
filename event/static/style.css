@@ -407,11 +407,19 @@ display:block;
 
 	margin: 10px;
 }
+
 .ZalogowanyUzytkownik img
 {
 	height:70px;
 	width: auto;
 }
+
+.ZalogowanyUzytkownik img:hover
+{
+	cursor: pointer;
+}
+
+
 .niezalogowanyUzytkownik{
 	margin-top:30px;
 }
@@ -846,7 +854,7 @@ input, select, textarea{
 	background-color: rgba(121, 121, 121, 0.74);
 	text-align: left;
 	 width: 800px;
-	 height: 500px;
+	 height: 550px;
 	 border-radius: 9px;
 	 border-radius: 9px;
 	 border: #5ef308;
@@ -876,7 +884,7 @@ input, select, textarea{
 
 .Text4
 {
-
+ color: #7361d8;
  text-align: left;
 }
 
@@ -887,6 +895,14 @@ input, select, textarea{
 	margin-top: 25px;
 }
 
+.Text4
+{
+	float: left;
+	margin: 5px;
+
+}
+
+
 .Text h1
 {
   font-size: 50;
@@ -896,9 +912,20 @@ input, select, textarea{
 .options
 {
 	margin: 5px;
+	font-size: 15px;
 	float: right;
 	color: #222222;
 }
+
+
+.options3
+{
+	margin: 5px;
+	float: right;
+	margin-right: 70%px;
+	color: #222222;
+}
+
 
 .options1
 {
@@ -959,13 +986,14 @@ input, select, textarea{
 .komentarze
 {
 
-	background-color: #636363;
+	background-color: #63636371;
 	overflow-wrap: break-word;
   	word-wrap: break-word;
   	hyphens: auto;
 	width:  790px;
 	height: auto;
 	border-style: solid;
+	border-radius: 15px;
 	margin: auto;
 	margin-top: 25px;
 	margin-bottom: 25px;
@@ -997,17 +1025,12 @@ input, select, textarea{
 }
 
 
-.komentarze > .tresc
-{
-	text-align:center;
-
-}
 
 .tresc
 {
 
-	margin-top: 10%;
-
+	
+	margin: 20px;
 }
 
 .Opiss
@@ -1080,4 +1103,72 @@ margin-left: 333px;
 .szukajka{
 	margin-top:30px;
 	display: inline-block;
+}
+
+.dropdown {
+	position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+	display: none;
+	
+  position: absolute;
+  background-color: #459b45;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: white;
+	padding: 12px 16px;
+	border-bottom: 1px dashed #296D09;
+  display: block;
+}
+
+.dropdown a:hover {background-color: #296D09;}
+
+.show {display: block;}
+
+.stronicowanie{
+	text-align: center;
+	display: inline;
+}
+
+.szukaj
+{
+	margin:5px;
+}
+
+.szukaj2
+{
+	margin:1000px;
+}
+
+.s
+{
+	margin:5px;
+}
+
+
+.buttons
+{
+	width: 65px;
+	height: 85px;
+	padding: 4px;
+	padding-left: 9px;
+	padding-right: 9px;
+	background-color: #e1e1e1;
+	color: white;
+	text-decoration : none;
+	text-align: center;
+}
+
+.slajder
+{
+
+	height: 450px;
+	margin:5px;
 }

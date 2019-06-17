@@ -26,12 +26,30 @@
 
 				{% if request.user.is_authenticated %}
 				<div class="ZalogowanyUzytkownik">
-
+				{{request.user.photo.url}}
+				
 				{% if user.photo %}
-				<img src="{{user.photo.url}}"/>
+				
+				<div class="dropdown">
+ 				 <img src="{{user.photo.url}}" onclick="myFunction()" class="dropbtn"/>
+  				 <div id="myDropdown" class="dropdown-content">
+    		     <a href="{% url 'my_account' %}">Moje konto</a>
+    			 <a href="{% url 'my_friends' %}">Znajomi</a>
+				{% if request.session.new_notifications != null %}
+					<a href="{% url 'get_notifications'%}">{{request.session.new_notifications}}</a>
+					{% else %}
+					<a href="{% url 'get_notifications'%}">Powiadomienia</a>
+					{% endif %}
+				
+				
+				
+				 <a href="{% url 'logout' %}">Wyloguj się</a>
+  				</div>	
 				{% endif %}
+				
+			</div>
 				<span style="vertical-align:bottom;">	Witaj, {{ request.user.username }}!</span>
-				<a href="{% url 'logout' %}" style="vertical-align:bottom;" class="btn btn-success"> Wyloguj!</a>
+			
 			</div>
 				{% else %}
 				<div  class="niezalogowanyUzytkownik">
@@ -44,13 +62,35 @@
 			</div>
 
 </div>
+<div class="szukaj" >
+<form>
+    <select id="choice_select" name="wybor" action ="{% url 'index' %}">
+        <option value="event">Wydarzenia</option>
+        <option value="place">Miejsca</option>
+        <option value="person">Użytkownicy</option>
+    </select>
+       <input name="search_phrase" type="text" placeholder="Szukaj ...">
+			 	{% if indexsa != None%}
+				<button name="submit" type="submit" id="button_submit"  >Szukaj</button>
+				{% else %}
+		
+				 <a  class= "buttons" href="{% url 'index' %}">Szukaj</a>
+				
+				{%endif%}
+				
+     
+</form>
+
+
+</div>
 
 		<div class="nav">
 			<ol>
 
 				<li><span >Ogłoszenie</span>
 					<ul>
-						<li><a href="{% url 'advlist' %}">Pokaż ogłoszenia</a></li>
+						<li><a href="{% url 'advlist' %}">Aktualne ogłoszenia</a></li>
+						<li><a href="{% url 'archive_advlist' %}">Archiwum</a></li>
 						{% if request.user.is_authenticated %}
 						<li><a href="{% url 'new_adv' %}">Dodaj ogłoszenie</a></li>
 						{%endif%}
@@ -62,7 +102,8 @@
 						<li><a href="{% url 'moje_wydzarzenia' %}">Moje wydarzenia</a></li>
 						<li><a href="{% url 'new_event' %}">Dodaj nowe</a></li>
 						{%endif%}
-						<li><a href="{% url 'events_list' %}">Wszystkie</a></li>
+						<li><a href="{% url 'events_list' %}">Bieżące wydarzenia</a></li>
+						<li><a href="{% url 'archive_events' %}">Archiwum</a></li>
 					</ul>
 				</li>
 				<li><span>Miejsca</span>
@@ -70,7 +111,7 @@
 						<li><a href="{% url 'place_list'  %}">Wszystkie miejsca</a></li>
 
 						{% if request.user.is_authenticated %}
-						<li><a href="{% url 'new_place'  %}">Dodaj nowe!</a></li>
+						<li><a href="{% url 'new_place'  %}">Dodaj nowe</a></li>
 						{%endif%}
 
 					</ul>
@@ -80,24 +121,14 @@
 				<li><a href="#">Znajomi</a>
 					<ul>
 						<li><a href="{% url 'searchingz' %}">Szukaj</a></li>
-						<li><a href="{% url 'my_friends' %}">Moi znajomi</a></li>
 						<li><a href="{% url 'chats' %}">Moje czaty</a></li>
 						<li><a href="{% url 'new_chat'  %}">Utwórz czat</a></li>
 					</ul>
 				</li>
 				{%endif%}
-				{% if request.user.is_authenticated%}
-				<li><a href="{% url 'my_account' %}">Moje konto</a></li>
-				<li>{% if request.session.new_notifications != null %}
-					<a href="{% url 'get_notifications'%}">{{request.session.new_notifications}}</a>
-					{% else %}
-					<a href="{% url 'get_notifications'%}">Powiadomienia</a>
-					{% endif %}
-				</li>
-				{%endif%}
+				
 				{%endif%}
 				<li><a href="{% url 'authors' %}">Autorzy</a></li>
-				<li><a href="{% url 'searching' %}">Wyszukaj</a></li>
 			</ol>
 
 		</div>
@@ -109,12 +140,19 @@
 
 			{% endemoticons %}
 			{% endblock content %}
+
 		</div>
 
 
-		<div class="footer">Projekt SportCatch &copy; 2018/19 Politechnika Białostocka</div>
+		<div class="footer">Projekt SportCatch &copy; 2018/19 Politechnika Białostocka
 
-
+		</div>
+<div style="margin:20px">
+	Użytkowników on-line: {{zalogowani}}
+	<br/>
+	Zarejestrowanych użytkowników: {{zarejestrowani}}<br/>
+	Nadchodzących wydarzeń: {{nadchodzace}}
+</div>
 	<script src="jquery-1.11.3.min.js"></script> <!-- sticky menu bar -->
 
 	<script>
@@ -142,6 +180,28 @@
 
 
 	</script>
+
+	<script>
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+</script>
 
 	<script>
  		var checker = document.getElementById('klauzula1');

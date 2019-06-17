@@ -32,11 +32,11 @@ urlpatterns = [
     path("usun_uczestnika/<int:pk>/<int:ucz>", views.uczestnik_delete, name="usun_uczestnika"),
     path("events/adv_list", views.AdvList, name='advlist'),
     path("events/adv/<int:pk>", views.adv_detail, name='adv_detail'),
-    path('events/adv/<int:pk>/edit', views.adv_edit, name='adv_edit'),
+    path('events/adv/<int:pk>/edit', views.OgloszenieUpdate.as_view(), name='adv_edit'),
     path('deleteCom3/<int:pk>/<int:comPK>/', views.Delete_Com3, name='delete_com3'),
     path('deleteAdv/<int:pk>',views.Delete_adv,name='adv_delete'),
     path('events/adv/<int:pkadv>/<int:pk>',views.EditCommentAdv,name='EditCommentAdv'),
-    path("searching/",views.searching,name="searching"),
+    path('',views.searching,name="searching"),
     path("searchingz/",views.searchingz,name="searchingz"),
     path('Ocena/<int:ocena>/<int:pkmiast>',views.Ocenki,name='Ocena'),
     path('Ocena_w/<int:ocena>/<int:pkwydarzeni>',views.Ocenki_w,name='Ocena_w'),
@@ -44,6 +44,10 @@ urlpatterns = [
     path("checkUser/", views.checkUser, name="checkUser"),
     path('join_friend/<int:pk>',views.add_frend,name='join_friend'),
     path('przyjmij_zaproszenie/<int:pika>/<int:czu>',views.przyjmij_zaproszenie,name='przyjmij_zaproszenie'),
+    path('archive_events', views.archive_events, name='archive_events'),
+    path('archive_advlist', views.archive_advlist, name='archive_advlist'),
+    path('add_adv_to_archive/<int:pk>', views.add_adv_to_archive, name='add_adv_to_archive'),
+    path('remove_from_archive/<int:pk>', views.remove_from_archive, name='remove_from_archive'),
 ]
 
 if settings.DEBUG:

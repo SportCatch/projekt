@@ -1,0 +1,56 @@
+{% extends 'Base.html' %}
+{% block title %}Nasza zespołowa aplikacja- SportCatch{% endblock %}
+{% block content %}
+<div class="wydarzenia">
+    <h2>Archiwum ogłoszeń</h2>
+    <div class="Elementy_wydarzen">
+
+
+        {% for adv in listapag %}
+        <div class="Obramowanie">
+            <div class="Text">
+                <h2><a href="{%url 'adv_detail' pk=adv.pk%}">{{adv.tytul}}</a></h2>
+                <p>Autor: {{adv.autor}}</p>
+                <p>Data: {{adv.data}}</p>
+
+            </div>
+
+            {% if request.user.is_authenticated and request.user.username == adv.autor.username%}
+            <div class="options">
+                <a class="btn btn-default" href="{% url 'adv_delete' pk=adv.pk %}"><i
+                        class="glyphicon glyphicon-trash"></i></a>
+                <a class="btn btn-default" href="{%url 'adv_edit' pk=adv.pk%}"><i
+                        class="glyphicon glyphicon-pencil"></i></a>
+                <br/>
+                <a href="{% url 'remove_from_archive' pk=adv.pk %}" style="color:white">Uaktualnij ogłoszenie</a>
+            </div>
+
+            {%endif%}
+
+
+        </div>
+        {%endfor%}
+
+    </div>
+</div>
+<div class="wydarzenia">
+    <div class>
+         {{ listapag.number }} / {{ listapag.paginator.num_pages }}
+    </div>
+
+   {% if listapag.has_previous %}
+        <div class="stronicowanie">
+            <a  class="btn btn-danger " href="?page=1">&laquo;</a>
+            <a  class="btn btn-success " href="?page={{ listapag.previous_page_number }}">Poprzednia</a>
+        </div>
+{% endif %}
+  
+  {% if listapag.has_next %}
+          <div class="stronicowanie">
+            <a  class="btn btn-success " href="?page={{ listapag.next_page_number }}">Następna</a>
+            <a  class="btn btn-danger " href="?page={{ listapag.paginator.num_pages }}"> &raquo;</a>
+         </div>
+ 
+  {% endif %}
+</div>
+{% endblock %}

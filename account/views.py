@@ -75,12 +75,14 @@ def edit_profile(request):
 
 def account_info(request):
 	profil = Profile.objects.get(user=request.user)
-	return render(request, 'account/account_info.html', {'user': profil})
+	user2 = Profile.objects.get(user = request.user)
+	return render(request, 'account/account_info.html', {'profile': profil, 'user':user2})
 
 def other_account_info(request, pk):
 	u = User.objects.get(pk=pk)
 	user = Profile.objects.get(user=u)
-	return render(request, 'account/account_info.html', {'user': user})
+	user2 = Profile.objects.get(user = request.user)
+	return render(request, 'account/account_info.html', {'profile': user, 'user':user2})
 
 def my_friends(request):
 	profil = Profile.objects.get(user=request.user)
