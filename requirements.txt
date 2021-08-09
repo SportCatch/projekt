@@ -56,4 +56,4 @@ PyInstaller==3.3.1
 pymongo==3.7.2
 pypiwin32==223
 python-cas==1.4.0
-pywin32==220
+pywin32==301
